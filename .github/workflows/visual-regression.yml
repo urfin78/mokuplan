@@ -24,7 +24,16 @@ jobs:
 
       - name: Install Chromium for Playwright
         working-directory: .github
-        run: npx playwright install --with-deps chromium
+        # The runner's Ubuntu mirrors sometimes fail to resolve for a while: apt retries each
+        # download, and the whole install is retried before the job gives up
+        run: |
+          echo 'Acquire::Retries "5";' | sudo tee /etc/apt/apt.conf.d/80-retries > /dev/null
+          for attempt in 1 2 3; do
+            npx playwright install --with-deps chromium && exit 0
+            echo "::warning::Playwright install failed (attempt $attempt of 3)"
+            [ "$attempt" -lt 3 ] && sleep 60
+          done
+          exit 1
 
       - name: Run visual regression tests
         env:
