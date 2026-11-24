@@ -947,7 +947,8 @@ window.addEventListener('load', function() {
             'sheet.view.top': 'Top view',
             'sheet.view.iso': 'Isometric view',
             'sheet.view.other': 'Other side: Pos. {pos}',
-            'sheet.view.detail': 'Detail {id}: Pos. {pos} (×{zoom} vs. isometric view)',
+            'sheet.view.detail': 'Detail {id}: Pos. {pos} enlarged, see frame {id} in the isometric view',
+            'sheet.view.detailSame': 'Detail {id}: Pos. {pos} enlarged, the same at the {count} places marked {id} in the isometric view',
             'sheet.details': 'Other sides and hidden parts',
             'sheet.partsList': 'Parts list',
             'sheet.col.pos': 'Pos.',
@@ -956,7 +957,7 @@ window.addEventListener('load', function() {
             'sheet.col.dims': 'Dimensions',
             'sheet.col.miter': 'Miter',
             'sheet.cuts': 'Miter and angled cuts',
-            'sheet.cuts.hint': 'Profiles look along the depth, so each cut runs across the full depth of the part. The angle lies inside the part and is measured from the bottom edge; saw is the deviation from a square cut. Boards with swapped start and end angles are the same part, turned by 180°. Outline coordinates start at the lower left corner of the blank. The drawings are not to scale with each other.',
+            'sheet.cuts.hint': 'Profiles look along the depth, so each cut runs across the full depth of the part. The angle lies inside the part and is measured from the bottom edge; saw is the deviation from a square cut. Boards with swapped start and end angles are the same part, turned by 180°. Outline coordinates start at the lower left corner of the blank. The drawings are not to scale with each other: the bar at the top left of each shows its scale.',
             'sheet.cuts.caption': 'Pos. {pos} · {qty}× {name} · {size}',
             'sheet.cuts.start': 'Start {angle}°',
             'sheet.cuts.end': 'End {angle}°',
@@ -970,6 +971,7 @@ window.addEventListener('load', function() {
             'sheet.cuts.col.to': 'To (x / y)',
             'sheet.cuts.contour': 'Saw along the outline, e.g. with a jigsaw: the full-size template follows on the next pages.',
             'sheet.cuts.holes': 'Holes, centre from the lower left corner: {list}',
+            'sheet.cuts.holesPos': 'Pos. {pos}: {list}',
             'sheet.cuts.hole': 'Ø{dia} at {u} / {v}',
             'sheet.cuts.bore': 'Ø{dia} drilled along the face from {a} to {b}',
             'sheet.cuts.holeBlind': 'Ø{dia} at {u} / {v}, {depth} mm deep from the {side}',
@@ -978,8 +980,9 @@ window.addEventListener('load', function() {
             'sheet.cuts.side.front': 'drawn side',
             'sheet.cuts.side.back': 'back',
             'sheet.template': 'Full-size templates',
-            'sheet.template.hint': 'Print at 100 % scale, not "fit to page", and check the 100 mm line with a ruler. Line up the crosses of neighbouring sheets, glue the template onto the board and saw along the line.',
+            'sheet.template.hint': 'Print at 100 % scale, not "fit to page", and check the 100 mm line with a ruler. Line up the crosses of neighbouring sheets, glue the template onto the board and saw along the line. Sawing uses the template up: print sheets marked "print 2×" that many times, one set per part.',
             'sheet.template.sheet': 'Pos. {pos} · {name} · sheet {n} of {total}',
+            'sheet.template.copies': 'print {count}×',
             'sheet.template.check': '100 mm',
             'sheet.empty': 'The model is empty — nothing to print.',
             'sheet.stock.summary': 'Stock material:',
@@ -1275,7 +1278,8 @@ window.addEventListener('load', function() {
             'sheet.view.top': 'Draufsicht',
             'sheet.view.iso': 'Isometrie',
             'sheet.view.other': 'Andere Seite: Pos. {pos}',
-            'sheet.view.detail': 'Detail {id}: Pos. {pos} (×{zoom} gegenüber Isometrie)',
+            'sheet.view.detail': 'Detail {id}: Pos. {pos} vergrößert, siehe Rahmen {id} in der Isometrie',
+            'sheet.view.detailSame': 'Detail {id}: Pos. {pos} vergrößert, gleich an den {count} mit {id} markierten Stellen der Isometrie',
             'sheet.details': 'Andere Seiten und verdeckte Teile',
             'sheet.partsList': 'Teileliste',
             'sheet.col.pos': 'Pos.',
@@ -1284,7 +1288,7 @@ window.addEventListener('load', function() {
             'sheet.col.dims': 'Maße',
             'sheet.col.miter': 'Gehrung',
             'sheet.cuts': 'Gehrungs- und Schrägschnitte',
-            'sheet.cuts.hint': 'Die Profile blicken entlang der Tiefe, jeder Schnitt läuft also über die ganze Tiefe des Teils. Der Winkel liegt im Teil und wird von der Unterkante gemessen; Säge ist die Abweichung vom rechtwinkligen Schnitt. Bretter mit vertauschtem Start- und Endwinkel sind dasselbe Teil, um 180° gedreht. Die Koordinaten der Konturen beginnen an der linken unteren Ecke des Rohteils. Die Zeichnungen haben untereinander nicht denselben Maßstab.',
+            'sheet.cuts.hint': 'Die Profile blicken entlang der Tiefe, jeder Schnitt läuft also über die ganze Tiefe des Teils. Der Winkel liegt im Teil und wird von der Unterkante gemessen; Säge ist die Abweichung vom rechtwinkligen Schnitt. Bretter mit vertauschtem Start- und Endwinkel sind dasselbe Teil, um 180° gedreht. Die Koordinaten der Konturen beginnen an der linken unteren Ecke des Rohteils. Die Zeichnungen haben untereinander nicht denselben Maßstab: Der Balken oben links zeigt den Maßstab jeder Zeichnung.',
             'sheet.cuts.caption': 'Pos. {pos} · {qty}× {name} · {size}',
             'sheet.cuts.start': 'Start {angle}°',
             'sheet.cuts.end': 'Ende {angle}°',
@@ -1298,6 +1302,7 @@ window.addEventListener('load', function() {
             'sheet.cuts.col.to': 'Bis (x / y)',
             'sheet.cuts.contour': 'Entlang der Kontur sägen, z. B. mit der Stichsäge: Die 1:1-Schablone folgt auf den nächsten Seiten.',
             'sheet.cuts.holes': 'Bohrungen, Mitte ab der linken unteren Ecke: {list}',
+            'sheet.cuts.holesPos': 'Pos. {pos}: {list}',
             'sheet.cuts.hole': 'Ø{dia} bei {u} / {v}',
             'sheet.cuts.bore': 'Ø{dia} längs in der Fläche gebohrt, von {a} bis {b}',
             'sheet.cuts.holeBlind': 'Ø{dia} bei {u} / {v}, {depth} mm tief von der {side}',
@@ -1306,8 +1311,9 @@ window.addEventListener('load', function() {
             'sheet.cuts.side.front': 'gezeichneten Seite',
             'sheet.cuts.side.back': 'Rückseite',
             'sheet.template': 'Schablonen 1:1',
-            'sheet.template.hint': 'Mit 100 % drucken, nicht „an Seite anpassen“, und die 100-mm-Linie mit dem Lineal prüfen. Die Kreuze benachbarter Blätter aufeinanderlegen, die Schablone auf das Brett kleben und entlang der Linie sägen.',
+            'sheet.template.hint': 'Mit 100 % drucken, nicht „an Seite anpassen“, und die 100-mm-Linie mit dem Lineal prüfen. Die Kreuze benachbarter Blätter aufeinanderlegen, die Schablone auf das Brett kleben und entlang der Linie sägen. Beim Sägen wird die Schablone verbraucht: Blätter mit „2× drucken“ entsprechend oft drucken, einen Satz je Teil.',
             'sheet.template.sheet': 'Pos. {pos} · {name} · Blatt {n} von {total}',
+            'sheet.template.copies': '{count}× drucken',
             'sheet.template.check': '100 mm',
             'sheet.empty': 'Das Modell ist leer – nichts zu drucken.',
             'sheet.stock.summary': 'Ausgangsmaterial:',
@@ -5312,6 +5318,9 @@ window.addEventListener('load', function() {
     ];
     // A piece with fewer visible pixels in a half-size probe image counts as not visible there
     var SHEET_MIN_VISIBLE_PX = 4;
+    // Pieces within this many mm of a detail cluster count as its neighbours when telling
+    // repeated details apart
+    var SHEET_DETAIL_TOUCH = 2;
     // hAxis/vAxis: world axis spanned horizontally/vertically in the image, used for the dimension values
     var SHEET_VIEWS = [
         { key: 'sheet.view.front', dir: [0, 0, 1], up: [0, 1, 0], hAxis: 'x', vAxis: 'y' },
@@ -5768,6 +5777,25 @@ window.addEventListener('load', function() {
         }
     }
 
+    // Scale bar for a drawing that is true to scale, with its left end at (x, y): the longest
+    // round length (1, 2 or 5 × 10ⁿ mm) that fits into maxLength drawing units. A bar stays right
+    // when the print is shrunk to fit the page, unlike a ratio such as 1:4.
+    function drawScaleBar(svg, x, y, unitsPerMm, maxLength) {
+        var maxMm = maxLength / unitsPerMm;
+        var mm = Math.pow(10, Math.floor(Math.log10(maxMm)));
+        if (mm * 5 <= maxMm) mm *= 5;
+        else if (mm * 2 <= maxMm) mm *= 2;
+        var length = mm * unitsPerMm;
+        var height = 8;
+        var g = svgEl('g', { stroke: '#000', 'stroke-width': 1.5 }, svg);
+        svgEl('rect', { x: x, y: y, width: length / 2, height: height, fill: '#000' }, g);
+        svgEl('rect', { x: x + length / 2, y: y, width: length / 2, height: height, fill: '#fff' }, g);
+        svgEl('text', {
+            x: x + length + 10, y: y + height + 1, 'font-size': 26,
+            'font-family': 'Arial, sans-serif', fill: '#000', stroke: 'none'
+        }, svg).textContent = formatMm(mm) + ' mm';
+    }
+
     // Numbered circle; numbers match the Pos. column of the parts list
     function drawPositionMarker(svg, x, y, number) {
         svgEl('circle', { cx: x, cy: y, r: 23, fill: '#fff', stroke: '#000', 'stroke-width': 1.5 }, svg);
@@ -5799,6 +5827,8 @@ window.addEventListener('load', function() {
         var minY = Math.min.apply(null, ys), maxY = Math.max.apply(null, ys);
         drawDimension(svg, minX, maxX, maxY, true, size[view.hAxis]);
         drawDimension(svg, minY, maxY, maxX, false, size[view.vAxis]);
+        // Straight views are true to scale, unlike the isometric and detail views
+        drawScaleBar(svg, 30, 30, SHEET_VIEW_W / (cam.right - cam.left), 250);
     }
 
     // Opaque whole-model view numbering the parts first visible from this direction
@@ -5853,19 +5883,51 @@ window.addEventListener('load', function() {
         });
     }
 
-    // Zoomed X-ray view of one cluster of enclosed pieces, with its frame marked on the overview
-    function buildDetailFigure(parent, cluster, letter, iso, modelRadius, partNumbers) {
-        var size = cluster.box.getSize(new THREE.Vector3());
-        var frame = cluster.box.clone().expandByScalar(Math.max(20, Math.max(size.x, size.y, size.z) / 2));
+    // Clusters with the same parts against the same neighbours, like one joint repeated at every
+    // corner, share one detail view. Returns lists of clusters, one per view.
+    function groupSameDetails(clusters, partNumbers) {
+        var boxes = pieces.map(function(m) { return new THREE.Box3().setFromObject(m); });
+        var byKey = {};
+        var groups = [];
+        clusters.forEach(function(cluster) {
+            var touch = cluster.box.clone().expandByScalar(SHEET_DETAIL_TOUCH);
+            var neighbours = [];
+            boxes.forEach(function(box, i) {
+                if (cluster.members.indexOf(i) !== -1 || !box.intersectsBox(touch)) return;
+                if (neighbours.indexOf(partNumbers[i]) === -1) neighbours.push(partNumbers[i]);
+            });
+            var byNumber = function(a, b) { return a - b; };
+            var size = cluster.box.getSize(new THREE.Vector3()).toArray().map(Math.round).sort(byNumber);
+            var key = [
+                cluster.members.map(function(i) { return partNumbers[i]; }).sort(byNumber).join(','),
+                neighbours.sort(byNumber).join(','),
+                size.join('x')
+            ].join('|');
+            if (!byKey[key]) {
+                byKey[key] = [];
+                groups.push(byKey[key]);
+            }
+            byKey[key].push(cluster);
+        });
+        return groups;
+    }
+
+    // Zoomed X-ray view of the first of a list of alike clusters of enclosed pieces, with the
+    // frame of each one marked on the overview
+    function buildDetailFigure(parent, clusters, letter, iso, modelRadius, partNumbers) {
+        function frameOf(cluster) {
+            var size = cluster.box.getSize(new THREE.Vector3());
+            return cluster.box.clone().expandByScalar(Math.max(20, Math.max(size.x, size.y, size.z) / 2));
+        }
+        var cluster = clusters[0];
         var cam = makeSheetCamera(
-            frame, new THREE.Vector3().fromArray(SHEET_PROBE_DIRS[0]), new THREE.Vector3(0, 1, 0),
+            frameOf(cluster), new THREE.Vector3().fromArray(SHEET_PROBE_DIRS[0]), new THREE.Vector3(0, 1, 0),
             SHEET_VIEW_W, SHEET_DETAIL_H, 10, modelRadius
         );
-        var zoom = (iso.cam.right - iso.cam.left) / (cam.right - cam.left);
-        var caption = t('sheet.view.detail', {
+        var caption = t(clusters.length > 1 ? 'sheet.view.detailSame' : 'sheet.view.detail', {
             id: letter,
             pos: formatPartNumbers(cluster.members, partNumbers),
-            zoom: zoom.toLocaleString(currentLang, { maximumFractionDigits: 1 })
+            count: clusters.length
         });
         var svg = buildSheetFigure(parent, cam, SHEET_VIEW_W, SHEET_DETAIL_H, {
             clean: true,
@@ -5876,16 +5938,18 @@ window.addEventListener('load', function() {
             var c = projectToSheetPx(cam, center, SHEET_VIEW_W, SHEET_DETAIL_H);
             return { x: c.x, y: c.y, number: partNumbers[i] };
         }), SHEET_VIEW_W, SHEET_DETAIL_H);
-        var px = boxCorners(frame).map(function(p) { return projectToSheetPx(iso.cam, p, SHEET_VIEW_W, SHEET_VIEW_H); });
-        var xs = px.map(function(p) { return p.x; });
-        var ys = px.map(function(p) { return p.y; });
-        var minX = Math.min.apply(null, xs);
-        var minY = Math.min.apply(null, ys);
-        svgEl('rect', {
-            x: minX, y: minY, width: Math.max.apply(null, xs) - minX, height: Math.max.apply(null, ys) - minY,
-            fill: 'none', stroke: '#c8452f', 'stroke-width': 2.5, 'stroke-dasharray': '10 6'
-        }, iso.svg);
-        svgText(iso.svg, minX + 14, minY - 8, 26, letter);
+        clusters.forEach(function(each) {
+            var px = boxCorners(frameOf(each)).map(function(p) { return projectToSheetPx(iso.cam, p, SHEET_VIEW_W, SHEET_VIEW_H); });
+            var xs = px.map(function(p) { return p.x; });
+            var ys = px.map(function(p) { return p.y; });
+            var minX = Math.min.apply(null, xs);
+            var minY = Math.min.apply(null, ys);
+            svgEl('rect', {
+                x: minX, y: minY, width: Math.max.apply(null, xs) - minX, height: Math.max.apply(null, ys) - minY,
+                fill: 'none', stroke: '#c8452f', 'stroke-width': 2.5, 'stroke-dasharray': '10 6'
+            }, iso.svg);
+            svgText(iso.svg, minX + 14, minY - 8, 26, letter);
+        });
     }
 
     // Each part alone in the isometric direction, fitted to the image: not to scale with each other
@@ -6088,6 +6152,7 @@ window.addEventListener('load', function() {
         drawDimension(svg, px(xLT), px(xRT), top, true, xRT - xLT, t('sheet.cuts.top'), true);
         drawDimension(svg, px(xLB), px(xRB), bottom, true, ud.w, t('sheet.cuts.bottom'));
         drawDimension(svg, top, bottom, px(maxX), false, ud.h);
+        drawScaleBar(svg, 20, 12, scale, 200);
         svgText(svg, SHEET_CUT_W * 0.25, bottom + 110, 28, miterEndText('sheet.cuts.start', aS));
         svgText(svg, SHEET_CUT_W * 0.75, bottom + 110, 28, miterEndText('sheet.cuts.end', aE));
         sheetEl('figcaption', null, fig).textContent = cutCaption(group, pos);
@@ -6391,10 +6456,18 @@ window.addEventListener('load', function() {
         });
     }
 
-    // "Holes (centre from the lower left corner): Ø6 at 152 / 20" below a drawing, if there are any
-    function addOutlineHoleText(fig, holes) {
-        if (holes.length === 0) return;
-        var list = holes.map(function(hole) {
+    // "Holes (centre from the lower left corner): Ø6 at 152 / 20" below a drawing, if there are any.
+    // A drawing shared by several rows whose holes open on different sides lists them per row.
+    function addOutlineHoleText(fig, outline) {
+        var list = outline.holesByPos ? outline.holesByPos.map(function(entry) {
+            return t('sheet.cuts.holesPos', { pos: entry.pos, list: holeListText(entry.holes) });
+        }).join(' · ') : holeListText(outline.holes);
+        if (!list) return;
+        sheetEl('p', 'sheet-cuts-hint', fig).textContent = t('sheet.cuts.holes', { list: list });
+    }
+
+    function holeListText(holes) {
+        return holes.map(function(hole) {
             var params = { dia: formatMm(hole.r * 2) };
             if (hole.depth !== undefined) params.depth = formatMm(hole.depth);
             if (hole.side === 'front' || hole.side === 'back') params.side = t('sheet.cuts.side.' + hole.side);
@@ -6406,8 +6479,7 @@ window.addEventListener('load', function() {
             params.a = formatMm(hole.a[0]) + ' / ' + formatMm(hole.a[1]);
             params.b = formatMm(hole.b[0]) + ' / ' + formatMm(hole.b[1]);
             return t(hole.side === 'both' ? 'sheet.cuts.slot' : hole.side ? 'sheet.cuts.groove' : 'sheet.cuts.bore', params);
-        });
-        sheetEl('p', 'sheet-cuts-hint', fig).textContent = t('sheet.cuts.holes', { list: list.join('; ') });
+        }).join('; ');
     }
 
     // Even-odd test against the outline edges; used to put a cut's letter outside the part
@@ -6441,8 +6513,9 @@ window.addEventListener('load', function() {
         drawOutlineHoles(svg, outline.holes, function(u) { return left + u * scale; }, function(v) { return bottom - v * scale; }, scale, 2);
         drawDimension(svg, left, left + outline.width * scale, bottom, true, outline.width);
         drawDimension(svg, top, bottom, left + outline.width * scale, false, outline.height);
+        drawScaleBar(svg, 20, 12, scale, 200);
         sheetEl('p', 'sheet-cuts-hint', fig).textContent = t('sheet.cuts.contour');
-        addOutlineHoleText(fig, outline.holes);
+        addOutlineHoleText(fig, outline);
         sheetEl('figcaption', null, fig).textContent = cutCaption(group, pos);
     }
 
@@ -6476,6 +6549,8 @@ window.addEventListener('load', function() {
     function buildTemplateTiles(parent, group, pos, outline) {
         var layout = templateLayout(outline);
         var name = commonLabel(group.labels) || typeName(group.mesh.userData.type);
+        // Sawing uses a glued-on template up, so each part needs its own print
+        var copies = group.members.length;
         var number = 0;
         layout.rows.forEach(function(startV, row) {
             layout.columns.forEach(function(startU, col) {
@@ -6484,7 +6559,7 @@ window.addEventListener('load', function() {
                 var head = sheetEl('div', 'sheet-template-head', tile);
                 sheetEl('span', null, head).textContent = t('sheet.template.sheet', {
                     pos: pos, name: name, n: number, total: layout.count
-                });
+                }) + (copies > 1 ? ' · ' + t('sheet.template.copies', { count: copies }) : '');
                 // Control line to check the print scale with a ruler
                 var bar = svgEl('svg', { width: '104mm', height: '6mm', viewBox: '0 0 104 6' }, head);
                 var barLines = svgEl('g', { stroke: '#000', 'stroke-width': 0.3 }, bar);
@@ -6562,6 +6637,7 @@ window.addEventListener('load', function() {
         });
         drawDimension(svg, px(0), px(outline.width), bottom, true, outline.width);
         drawDimension(svg, top, bottom, px(outline.width), false, outline.height);
+        drawScaleBar(svg, 20, 12, scale, 200);
 
         var table = sheetEl('table', null, fig);
         var headRow = sheetEl('tr', null, sheetEl('thead', null, table));
@@ -6577,11 +6653,49 @@ window.addEventListener('load', function() {
             sheetEl('td', 'num', row).textContent = formatMm(e.a[0]) + ' / ' + formatMm(e.a[1]);
             sheetEl('td', 'num', row).textContent = formatMm(e.b[0]) + ' / ' + formatMm(e.b[1]);
         });
-        addOutlineHoleText(fig, outline.holes);
+        addOutlineHoleText(fig, outline);
         sheetEl('figcaption', null, fig).textContent = cutCaption(group, pos);
     }
 
-    // Page with one drawing per parts list row that needs an angled saw cut; no page without any
+    // Same sawn outline with holes in the same places: such rows share one drawing and one
+    // template. Which side a hole opens on is left out, the text below the drawing tells.
+    function outlineKey(outline) {
+        function pair(p) { return formatMm(p[0]) + ',' + formatMm(p[1]); }
+        function span(a, b) {
+            return pair(a) < pair(b) ? pair(a) + ';' + pair(b) : pair(b) + ';' + pair(a);
+        }
+        var edges = outline.edges.map(function(e) { return span(e.a, e.b); }).sort();
+        var holes = outline.holes.map(function(h) {
+            return 'Ø' + formatMm(h.r) + ' ' + (h.bore ? span(h.a, h.b) : pair([h.u, h.v]));
+        }).sort();
+        return [formatMm(outline.width), formatMm(outline.height), edges.join(' '), holes.join(' ')].join('|');
+    }
+
+    // One parts list row standing for several rows with the same outline
+    function mergeCutEntries(entries) {
+        if (entries.length === 1) return entries[0];
+        var first = entries[0];
+        var group = { mesh: first.group.mesh, members: [], labels: [] };
+        entries.forEach(function(entry) {
+            group.members = group.members.concat(entry.group.members);
+            group.labels = group.labels.concat(entry.group.labels);
+        });
+        var outline = first.outline;
+        var texts = entries.map(function(entry) { return holeListText(entry.outline.holes); });
+        if (texts.some(function(text) { return text !== texts[0]; })) {
+            outline = Object.assign({}, outline, {
+                holesByPos: entries.map(function(entry) { return { pos: entry.pos, holes: entry.outline.holes }; })
+            });
+        }
+        return {
+            group: group,
+            pos: formatPartNumbers(entries.map(function(entry, i) { return i; }), entries.map(function(entry) { return entry.pos; })),
+            outline: outline
+        };
+    }
+
+    // Page with one drawing per parts list row that needs an angled saw cut, rows with the same
+    // outline sharing one; no page without any
     function buildCutsPage(parent, rows) {
         var page = null;
         var grid = null;
@@ -6592,6 +6706,15 @@ window.addEventListener('load', function() {
             sheetEl('p', 'sheet-cuts-hint', page).textContent = t('sheet.cuts.hint');
             grid = sheetEl('div', 'sheet-views', page);
         }
+        var sameOutline = {};
+        var keyOfRow = rows.map(function(group, r) {
+            var ud = group.mesh.userData;
+            var outline = ud.type === 'Board' && ud.csgModified ? pieceCutOutline(group.mesh) : null;
+            if (!outline) return null;
+            var key = outlineKey(outline);
+            (sameOutline[key] = sameOutline[key] || []).push({ group: group, pos: r + 1, outline: outline });
+            return key;
+        });
         var templates = [];
         rows.forEach(function(group, r) {
             var ud = group.mesh.userData;
@@ -6600,18 +6723,19 @@ window.addEventListener('load', function() {
                 ensurePage();
                 buildMiterFigure(grid, group, r + 1);
             }
-            var outline = ud.csgModified ? pieceCutOutline(group.mesh) : null;
-            if (outline) {
-                ensurePage();
-                // Many angled edges make a shape to saw freehand along a line, not cuts to set a saw to
-                var isContour = outline.cuts.length > SHEET_CUT_TABLE_MAX_EDGES &&
-                    templateLayout(outline).count <= SHEET_TEMPLATE_MAX_TILES;
-                if (isContour) {
-                    buildContourFigure(grid, group, r + 1, outline);
-                    templates.push({ group: group, pos: r + 1, outline: outline });
-                } else {
-                    buildCutOutlineFigure(grid, group, r + 1, outline);
-                }
+            var key = keyOfRow[r];
+            // Drawn once, where the first of its rows comes
+            if (!key || sameOutline[key][0].pos !== r + 1) return;
+            var entry = mergeCutEntries(sameOutline[key]);
+            ensurePage();
+            // Many angled edges make a shape to saw freehand along a line, not cuts to set a saw to
+            var isContour = entry.outline.cuts.length > SHEET_CUT_TABLE_MAX_EDGES &&
+                templateLayout(entry.outline).count <= SHEET_TEMPLATE_MAX_TILES;
+            if (isContour) {
+                buildContourFigure(grid, entry.group, entry.pos, entry.outline);
+                templates.push(entry);
+            } else {
+                buildCutOutlineFigure(grid, entry.group, entry.pos, entry.outline);
             }
         });
         if (templates.length === 0) return;
@@ -8359,8 +8483,8 @@ window.addEventListener('load', function() {
                 buildOverviewFigure(details, overview, box, SHEET_DETAIL_H, partNumbers, caption, 'sheet-view sheet-other');
             });
             var modelRadius = Math.max(size.length(), 1);
-            clusters.forEach(function(cluster, i) {
-                buildDetailFigure(details, cluster, String.fromCharCode(65 + i % 26), iso, modelRadius, partNumbers);
+            groupSameDetails(clusters, partNumbers).forEach(function(same, i) {
+                buildDetailFigure(details, same, String.fromCharCode(65 + i % 26), iso, modelRadius, partNumbers);
             });
         }
 
