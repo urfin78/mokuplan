@@ -1106,3 +1106,42 @@ test('paint mode paints the clicked side, Shift+click the whole part', async ({ 
     await page.keyboard.press('Escape');
     await expect(page.locator('#paint-palette')).not.toHaveClass(/\bopen\b/);
 });
+
+
+test('parts list counts parts turned by 180° as the same part', async ({ page }) => {
+    await gotoApp(page);
+    const rows = await page.evaluate(() => {
+        const hole = (x) => [{ op: 'subtract', tool: { type: 'Dowel', local: true, px: x, py: 0, pz: 0, rx: 0, ry: 0, rz: 0, r: 3, h: 40 } }];
+        const spec = (id, x, at) => ({
+            type: 'Board', id, label: 'Post', notches: 1, csgModified: true, csgOps: hole(x),
+            px: at, py: 10, pz: 0, rx: 0, ry: 0, rz: 0, w: 100, h: 20, d: 50
+        });
+        // The same board with its hole 30 mm left and 30 mm right of the middle: one turned by 180°
+        window.__app.restoreScene(JSON.stringify({ pieces: [spec(1, 30, 0), spec(2, -30, 300)] }));
+        const sheet = window.__app.buildWorkshopSheet();
+        return Array.from(sheet.querySelectorAll('.sheet-parts tbody tr')).map((tr) => tr.querySelectorAll('td')[2].textContent);
+    });
+    expect(rows).toEqual(['2×']);
+});
+
+test('workshop sheet adds a cut top view for parts under a top', async ({ page }) => {
+    await gotoApp(page);
+    const result = await page.evaluate(() => {
+        const spec = (id, label, w, h, d, x, y, z) => ({
+            type: 'Board', id, label, notches: 0, csgModified: false,
+            px: x, py: y, pz: z, rx: 0, ry: 0, rz: 0, w, h, d
+        });
+        // A table: a top over four legs and two rails, which the plain top view cannot show
+        const pieces = [spec(1, 'Top', 300, 20, 300, 0, 210, 0)];
+        [[-130, -130], [130, -130], [-130, 130], [130, 130]].forEach(([x, z], i) => {
+            pieces.push(spec(2 + i, 'Leg', 40, 200, 40, x, 100, z));
+        });
+        pieces.push(spec(6, 'Rail', 220, 60, 20, 0, 170, -130), spec(7, 'Rail', 220, 60, 20, 0, 170, 130));
+        window.__app.setLanguage('en');
+        window.__app.restoreScene(JSON.stringify({ pieces }));
+        const sheet = window.__app.buildWorkshopSheet();
+        return Array.from(sheet.querySelectorAll('.sheet-section figcaption')).map((c) => c.textContent);
+    });
+    // Cut right on top of legs and rails: the table top is taken away whole
+    expect(result).toEqual(['Top view cut at 200 mm height: everything above taken away, cut faces dark (mm)']);
+});
