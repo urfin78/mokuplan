@@ -968,3 +968,141 @@ test('language and currency selects in the settings menu keep it open', async ({
     await page.mouse.click(5, 400);
     await expect(menu).not.toHaveClass(/\bopen\b/);
 });
+
+test('surface colors: sides per shape, cut faces, save round trip and paint totals', async ({ page }) => {
+    await gotoApp(page);
+    const result = await page.evaluate(() => {
+        const app = window.__app;
+        app.setFinishes([
+            { id: 'w', name: 'Pure white', hex: '#f1ece1', code: 'RAL 9010', kind: 'opaque', coverage: 10, coats: 2, packSize: 0.75, packPrice: 12 },
+            { id: 'o', name: 'Oil', hex: '#b5651d', kind: 'glaze' }
+        ]);
+        const sides = {};
+        app.ADD_TYPES.forEach((type) => {
+            const m = app.makeDefaultForType(type);
+            sides[type] = app.pieceSides(m);
+            m.geometry.dispose();
+        });
+        // Default board: 100 x 20 x 50 mm
+        const board = app.makeDefaultForType('Board');
+        app.addPiece(board);
+        const areas = app.pieceSideAreas(board);
+        app.setPieceSideColors(board, ['top', 'front'], 'w');
+        app.setPieceSideColors(board, ['end'], 'o');
+        const painted = { color: !!board.geometry.attributes.color, vertexColors: board.material.vertexColors };
+        const totals = app.finishTotals().map((x) => [x.finish.id, Math.round(x.area * 1e6), x.liters, x.packs, x.cost]);
+        // A dowel through the board leaves cut faces that stay raw wood
+        const dowel = app.makeDefaultForType('Dowel');
+        app.addPiece(dowel);
+        dowel.position.copy(board.position);
+        dowel.updateMatrixWorld(true);
+        app.performCut(board, dowel);
+        const afterCut = app.pieceSides(board);
+        const json = app.serializeScene();
+        app.restoreScene(json);
+        // restoreScene replaces the pieces array, so __app.pieces is stale here: walk the scene.
+        const restored = app.scene.children.find((c) => c.userData && c.userData.type === 'Board');
+        const sheet = app.buildWorkshopSheet();
+        const finishPage = sheet.querySelector('.sheet-finishes');
+        return {
+            sides, areas, painted, totals, afterCut,
+            saved: JSON.parse(json).pieces[0].colors,
+            restored: {
+                colors: restored.userData.colors,
+                color: !!restored.geometry.attributes.color,
+                vertexColors: restored.material.vertexColors
+            },
+            savedFinishes: app.serializeFinishes().map((f) => f.id),
+            finishRows: finishPage ? finishPage.querySelectorAll('tbody tr').length : 0,
+            partsHeader: Array.from(sheet.querySelectorAll('.sheet-parts th')).pop().textContent
+        };
+    });
+    expect(result.sides).toEqual({
+        'Board': ['top', 'bottom', 'front', 'back', 'start', 'end'],
+        'Frustum Board': ['top', 'bottom', 'front', 'back', 'start', 'end'],
+        'Pyramid Frustum': ['top', 'bottom', 'front', 'back', 'start', 'end'],
+        'Frame': ['top', 'bottom', 'front', 'back', 'start', 'end', 'inner'],
+        'Dowel': ['top', 'bottom', 'mantle'],
+        'Wedge': ['bottom', 'front', 'back', 'start', 'end'],
+        'L-Bracket': ['top', 'bottom', 'front', 'back', 'start', 'end', 'inner'],
+        'Tapered Leg': ['top', 'bottom', 'mantle']
+    });
+    expect(result.areas).toEqual({ top: 5000, bottom: 5000, front: 2000, back: 2000, start: 1000, end: 1000 });
+    expect(result.painted).toEqual({ color: true, vertexColors: true });
+    // 0.007 m² x 2 coats / 10 m²/l = 0.0014 l: one 0.75 l can. The oil has no coverage.
+    expect(result.totals).toEqual([['w', 7000, 0.0014, 1, 12], ['o', 1000, null, null, null]]);
+    expect(result.afterCut).toEqual(['top', 'bottom', 'front', 'back', 'start', 'end', 'cut']);
+    expect(result.saved).toEqual({ top: 'w', front: 'w', end: 'o' });
+    expect(result.restored).toEqual({ colors: { top: 'w', front: 'w', end: 'o' }, color: true, vertexColors: true });
+    expect(result.savedFinishes).toEqual(['w', 'o']);
+    // Two colors plus the total row
+    expect(result.finishRows).toBeGreaterThanOrEqual(3);
+    expect(result.partsHeader).toBe('Surface');
+});
+
+test('colors dialog adds a RAL color, saves it to the catalog and removing it clears the sides', async ({ page }) => {
+    await gotoApp(page);
+    await page.evaluate(() => {
+        window.__app.setFinishCatalog([]);
+        const board = window.__app.makeDefaultForType('Board');
+        window.__app.addPiece(board);
+        window.__app.openColorsModal();
+    });
+    const ral = page.locator('#colors-rows .colors-add input');
+    await ral.fill('9010');
+    await ral.press('Enter');
+    await expect(page.locator('#colors-rows tbody tr')).toHaveCount(1);
+    await expect(page.locator('#colors-rows tbody tr input[type="text"]').nth(1)).toHaveValue('RAL 9010');
+    await page.locator('#colors-rows tbody tr button', { hasText: 'To catalog' }).click();
+    await page.locator('#colors-confirm').click();
+    const applied = await page.evaluate(() => {
+        const app = window.__app;
+        const f = app.getFinishes()[0];
+        app.setPieceSideColors(app.pieces[0], ['top'], f.id);
+        return {
+            finish: [f.code, f.hex, f.kind, f.coats],
+            catalog: app.getFinishCatalog().map((c) => c.code)
+        };
+    });
+    expect(applied.finish).toEqual(['RAL 9010', '#f7f9ef', 'opaque', 2]);
+    expect(applied.catalog).toEqual(['RAL 9010']);
+    // Removing a color in use asks first and turns its sides back into raw wood
+    page.once('dialog', (dialog) => dialog.accept());
+    await page.evaluate(() => window.__app.openColorsModal());
+    await page.locator('#colors-rows tbody tr button', { hasText: '×' }).first().click();
+    await page.locator('#colors-confirm').click();
+    const after = await page.evaluate(() => ({
+        finishes: window.__app.getFinishes().length,
+        colors: window.__app.pieces[0].userData.colors || null,
+        catalog: window.__app.getFinishCatalog().length
+    }));
+    expect(after).toEqual({ finishes: 0, colors: null, catalog: 1 });
+});
+
+test('paint mode paints the clicked side, Shift+click the whole part', async ({ page }) => {
+    await gotoApp(page);
+    // Screen point of the centre of the board's top face
+    const point = await page.evaluate(() => {
+        const app = window.__app;
+        app.setFinishes([{ id: 'r', name: 'Red', hex: '#a02020' }]);
+        const board = app.makeDefaultForType('Board');
+        app.addPiece(board);
+        app.selectPiece(null);
+        app.frameToObject(board);
+        app.forceRender();
+        app.enterPaintMode();
+        const p = new app.THREE.Vector3(0, 20, 0).project(app.camera);
+        const rect = app.renderer.domElement.getBoundingClientRect();
+        return { x: rect.left + (p.x + 1) / 2 * rect.width, y: rect.top + (1 - p.y) / 2 * rect.height };
+    });
+    await expect(page.locator('#paint-palette button.active')).toContainText('Red');
+    await page.mouse.click(point.x, point.y);
+    expect(await page.evaluate(() => window.__app.pieces[0].userData.colors)).toEqual({ top: 'r' });
+    await page.keyboard.down('Shift');
+    await page.mouse.click(point.x, point.y);
+    await page.keyboard.up('Shift');
+    expect(await page.evaluate(() => Object.keys(window.__app.pieces[0].userData.colors).sort()))
+        .toEqual(['back', 'bottom', 'end', 'front', 'start', 'top']);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#paint-palette')).not.toHaveClass(/\bopen\b/);
+});

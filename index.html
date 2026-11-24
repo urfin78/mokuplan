@@ -363,6 +363,68 @@
     }
     #catalog-rows .stock-warn { color: var(--danger); font-size: 11px; }
     #catalog-rows .catalog-empty { padding: 8px 4px; font-size: 12px; color: var(--text-muted); font-style: italic; }
+    /* Surface colors: side panel section, paint palette, colors dialog */
+    .color-swatch {
+        display: inline-block; width: 14px; height: 14px; flex: 0 0 auto; border-radius: 3px;
+        border: 1px solid rgba(0,0,0,.25); vertical-align: middle;
+    }
+    .color-swatch.raw { background: #c8934a; }
+    .color-swatch.glaze { background-image: linear-gradient(135deg, transparent 50%, rgba(200,147,74,.55) 50%); }
+    .color-swatch.mixed { background: conic-gradient(#c8934a 0 25%, #fff 0 50%, #c8934a 0 75%, #fff 0); }
+    #color-field { display: none; }
+    #color-field select, #paint-palette select {
+        background: var(--surface); color: var(--text);
+        border: 1px solid var(--border); border-radius: var(--radius-sm);
+        padding: 4px 4px; font-size: 12px; min-width: 0;
+    }
+    .color-side-row { display: grid; grid-template-columns: 14px minmax(0, 1fr) minmax(0, 1.4fr); gap: 6px; align-items: center; margin: 3px 0; font-size: 12px; }
+    .color-side-row .color-side-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .color-side-row .color-side-name small { color: var(--text-faint); }
+    .color-side-row.all { margin-bottom: 6px; font-weight: 500; }
+    .color-actions { display: flex; gap: 6px; margin-top: 8px; }
+    .color-actions button, #paint-palette button {
+        flex: 1; background: var(--surface); color: var(--text);
+        border: 1px solid var(--border); border-radius: var(--radius-sm);
+        padding: 6px 8px; cursor: pointer; font-size: 12px;
+    }
+    .color-actions button:hover, #paint-palette button:hover { background: var(--surface-2); }
+    .color-actions button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .color-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    #paint-palette {
+        position: fixed; top: 92px; left: 50%; transform: translateX(-50%); z-index: 200;
+        display: none; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: min(640px, calc(100vw - 340px));
+        background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 6px 8px; box-shadow: var(--shadow-md); font-size: 12px;
+    }
+    #paint-palette.open { display: flex; }
+    #paint-palette button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; }
+    #paint-palette button.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-faint); font-weight: 600; }
+    #colors-modal .modal-box { width: min(980px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; }
+    #colors-modal h4 { margin: 14px 0 6px; font-size: 12px; font-weight: 600; color: var(--text); }
+    #colors-modal table { width: 100%; border-collapse: collapse; font-size: 12px; color: var(--text); }
+    #colors-modal th { text-align: left; font-weight: 500; color: var(--text-muted); font-size: 11px; padding: 4px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    #colors-modal td { padding: 3px 4px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    #colors-modal td input[type="text"], #colors-modal td input[type="number"], #colors-modal td select {
+        width: 100%; min-width: 48px; background: var(--surface); color: var(--text);
+        border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 5px 6px; font-size: 12px;
+    }
+    #colors-modal td input[type="color"] { width: 34px; height: 26px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-sm); background: none; cursor: pointer; }
+    #colors-modal td.colors-name { min-width: 120px; }
+    #colors-modal td.colors-num { width: 74px; }
+    #colors-modal td.colors-actions { width: 1%; white-space: nowrap; }
+    #colors-modal td button {
+        background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);
+        border-radius: var(--radius-sm); padding: 3px 6px; font-size: 11px; cursor: pointer; white-space: nowrap;
+    }
+    #colors-modal td button:hover { color: var(--text); background: var(--surface-2); }
+    #colors-modal .colors-empty { padding: 8px 4px; font-size: 12px; color: var(--text-muted); font-style: italic; }
+    #colors-modal .colors-add { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    #colors-modal .colors-add select, #colors-modal .colors-add input, #colors-modal .colors-add button {
+        background: var(--surface); color: var(--text); border: 1px solid var(--border);
+        border-radius: var(--radius-sm); padding: 5px 8px; font-size: 12px;
+    }
+    #colors-modal .colors-add input { flex: 1 1 200px; }
+    #colors-modal .colors-add button { cursor: pointer; }
     #group-panel { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
     #group-panel h3 { margin: 0 0 6px; color: var(--text); font-size: 12px; }
     #group-member-info { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
@@ -490,7 +552,11 @@
     /* A long table of cuts may continue on the next page instead of leaving this one empty */
     #print-sheet .sheet-view.sheet-cut-wide { grid-column: 1 / -1; break-inside: auto; }
     #print-sheet .sheet-cut table { margin-top: 3pt; }
-    #print-sheet .sheet-parts, #print-sheet .sheet-details, #print-sheet .sheet-cuts, #print-sheet .sheet-templates, #print-sheet .sheet-stock { break-before: page; }
+    #print-sheet .sheet-parts, #print-sheet .sheet-details, #print-sheet .sheet-cuts, #print-sheet .sheet-templates, #print-sheet .sheet-stock, #print-sheet .sheet-finishes { break-before: page; }
+    #print-sheet .sheet-swatch { display: inline-block; width: 8pt; height: 8pt; border: 0.5pt solid #000; vertical-align: -1pt; margin-right: 3pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    #print-sheet .sheet-finish-list { margin: 0; padding: 0; list-style: none; }
+    #print-sheet .sheet-finish-list li { white-space: nowrap; }
+    #print-sheet .sheet-finishes h3 { font-size: 10.5pt; margin: 10pt 0 3pt; }
     /* Page 1 has a fixed height: the views share what the header and the stock summary leave,
        so a longer summary shrinks them instead of pushing the bottom row onto the next page.
        Image and overlay both letterbox the same way (contain / SVG "meet"), so they stay aligned. */
@@ -561,6 +627,9 @@
     <button class="icon-btn" id="btn-ruler" data-i18n-title="toolbar.ruler" title="Ruler">
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13l11-11 5 5L7 18z"/><path d="M5 10l1.5 1.5 M8 7l2 2 M11 4l1.5 1.5"/></svg>
     </button>
+    <button class="icon-btn" id="btn-paint" data-i18n-title="toolbar.paint" title="Paint">
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 3.5l5 5-6 6-5-5z"/><path d="M5.5 9.5L3 12c-.8.8-.8 2.2 0 3l2 2c.8.8 2.2.8 3 0l2.5-2.5"/><path d="M14 6l3-3"/></svg>
+    </button>
 
     <div class="separator"></div>
 
@@ -600,6 +669,7 @@
             <div class="menu-item" id="menu-print-sheet" data-i18n="toolbar.printSheet">Print Workshop Sheet</div>
             <div class="menu-item" id="menu-stock" data-i18n="toolbar.stock">Stock Material…</div>
             <div class="menu-item" id="menu-catalog" data-i18n="toolbar.catalog">Stock Catalog…</div>
+            <div class="menu-item" id="menu-colors" data-i18n="toolbar.colors">Colors…</div>
             <div class="menu-item" id="menu-export-png" data-i18n="toolbar.exportPng">Export View as PNG</div>
             <div class="menu-item" id="menu-export-templates" data-i18n="toolbar.exportTemplates">Export Templates</div>
             <div class="menu-item" id="menu-import-templates" data-i18n="toolbar.importTemplates">Import Templates</div>
@@ -776,6 +846,15 @@
         </label>
     </div>
 
+    <div id="color-field">
+        <h3 data-i18n="panel.colors">Surface</h3>
+        <div id="color-sides"></div>
+        <div class="color-actions">
+            <button id="btn-panel-paint" data-i18n="panel.colors.paint" data-i18n-title="panel.colors.paintHint" title="Paint sides by clicking them in the 3D view">Paint in view</button>
+            <button id="btn-panel-colors" data-i18n="panel.colors.manage">Colors…</button>
+        </div>
+    </div>
+
     <div id="summary-section">
         <h3 data-i18n="panel.sizeSummary">Size Summary</h3>
         <div id="size-summary"></div>
@@ -869,6 +948,20 @@
     </div>
 </div>
 <input type="file" id="catalog-import-input" accept=".woodstock.json,.json" style="display:none">
+
+<div id="colors-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 data-i18n="colors.title">Colors and finishes</h3>
+        <p class="stock-hint" data-i18n="colors.hint">Paints, glazes and oils of this project.</p>
+        <div id="colors-rows"></div>
+        <div class="modal-buttons">
+            <button id="colors-cancel" data-i18n="stock.cancel">Cancel</button>
+            <button id="colors-confirm" class="primary" data-i18n="stock.apply">Apply</button>
+        </div>
+    </div>
+</div>
+
+<div id="paint-palette"></div>
 
 <div id="print-sheet"></div>
 
@@ -1077,6 +1170,66 @@ window.addEventListener('load', function() {
             'catalog.importNone': 'The file holds no catalog entries that could be read.',
             'panel.bought': 'Bought ready-made',
             'panel.boughtHint': 'Bought at its own size, like a dowel pin or a turned leg: not sawn from stock. Its own price counts.',
+            'toolbar.paint': 'Paint sides',
+            'toolbar.colors': 'Colors…',
+            'panel.colors': 'Surface',
+            'panel.colors.paint': 'Paint in view',
+            'panel.colors.paintHint': 'Paint sides by clicking them in the 3D view',
+            'panel.colors.manage': 'Colors…',
+            'panel.colors.all': 'All sides',
+            'panel.colors.mixed': 'mixed',
+            'panel.colors.raw': 'Raw wood',
+            'panel.colors.none': 'No colors in this project yet: add one under Colors….',
+            'panel.colors.axes': 'Sides in the part’s own axes, so they stay with it when you turn it.',
+            'panel.cost.finish': '{area} m² × {coats} coats = {liters} l',
+            'side.top': 'Top',
+            'side.bottom': 'Bottom',
+            'side.front': 'Front',
+            'side.back': 'Back',
+            'side.start': 'Start',
+            'side.end': 'End',
+            'side.mantle': 'Curved face',
+            'side.inner': 'Inner faces',
+            'side.cut': 'Cut faces',
+            'paint.hint': 'Paint: click a side to give it the brush color, Shift+click paints the whole part. Esc ends.',
+            'paint.done': 'Done',
+            'colors.title': 'Colors and finishes',
+            'colors.hint': 'Paints, glazes and oils of this project. With coverage, coats and can size the workshop sheet works out how much to buy and what it costs. The catalog holds colors for all projects; it is stored in this browser.',
+            'colors.project': 'In this project',
+            'colors.catalog': 'Catalog (all projects)',
+            'colors.col.color': 'Color',
+            'colors.col.name': 'Name',
+            'colors.col.code': 'Code',
+            'colors.col.kind': 'Kind',
+            'colors.col.coverage': 'm²/l',
+            'colors.col.coats': 'Coats',
+            'colors.col.packSize': 'Can (l)',
+            'colors.col.packPrice': 'Price/can',
+            'colors.col.used': 'Parts',
+            'colors.kind.opaque': 'Paint (opaque)',
+            'colors.kind.glaze': 'Glaze / oil',
+            'colors.empty': 'No colors yet. Add a new one, a RAL color or one from the catalog.',
+            'colors.catalogEmpty': 'The catalog is empty. Save a project color to it with “To catalog”.',
+            'colors.add': 'New color',
+            'colors.ralPlaceholder': 'Add RAL color: 9010, white …',
+            'colors.toCatalog': 'To catalog',
+            'colors.toCatalogHint': 'Save this color to the catalog, for all projects',
+            'colors.use': 'Add',
+            'colors.remove': 'Remove',
+            'colors.newName': 'Color {n}',
+            'colors.removeUsed': '{name} is used on {count} part(s). Removing it turns those sides back into raw wood.',
+            'sheet.col.finish': 'Surface',
+            'sheet.finishes': 'Surfaces',
+            'sheet.finishes.hint': 'Sides are named in each part’s own axes: top and bottom along its height, front and back along its depth, start and end along its width or length. Cut faces are the walls of notches and holes. Areas are for one coat; the amount covers all coats and is rounded up to whole cans.',
+            'sheet.finishes.perPart': 'Per part',
+            'sheet.finishes.col.area': 'Area (m²)',
+            'sheet.finishes.col.amount': 'Amount (l)',
+            'sheet.finishes.col.packs': 'Cans',
+            'sheet.finishes.col.cost': 'Cost',
+            'sheet.finishes.col.sides': 'Sides and colors',
+            'sheet.finishes.all': 'all sides',
+            'sheet.finishes.packs': '{count} × {size} l',
+            'sheet.finishes.total': 'Total',
             'stock.cancel': 'Cancel',
             'stock.apply': 'Apply',
             'stock.kind.round': 'Dowel rod',
@@ -1408,6 +1561,66 @@ window.addEventListener('load', function() {
             'catalog.importNone': 'Die Datei enthält keine lesbaren Katalogeinträge.',
             'panel.bought': 'Fertig gekauft',
             'panel.boughtHint': 'In eigener Größe gekauft, wie ein Dübel oder ein gedrechseltes Bein: wird nicht aus Rohmaterial gesägt. Es zählt sein eigener Preis.',
+            'toolbar.paint': 'Seiten bemalen',
+            'toolbar.colors': 'Farben …',
+            'panel.colors': 'Oberfläche',
+            'panel.colors.paint': 'Im Modell malen',
+            'panel.colors.paintHint': 'Seiten durch Anklicken in der 3D-Ansicht bemalen',
+            'panel.colors.manage': 'Farben …',
+            'panel.colors.all': 'Alle Seiten',
+            'panel.colors.mixed': 'gemischt',
+            'panel.colors.raw': 'Holz roh',
+            'panel.colors.none': 'Noch keine Farben im Projekt: lege unter „Farben …“ eine an.',
+            'panel.colors.axes': 'Seiten in den eigenen Achsen des Teils, sie drehen sich also mit.',
+            'panel.cost.finish': '{area} m² × {coats} Anstriche = {liters} l',
+            'side.top': 'Oben',
+            'side.bottom': 'Unten',
+            'side.front': 'Vorne',
+            'side.back': 'Hinten',
+            'side.start': 'Start',
+            'side.end': 'Ende',
+            'side.mantle': 'Mantel',
+            'side.inner': 'Innenflächen',
+            'side.cut': 'Schnittflächen',
+            'paint.hint': 'Malen: Klick färbt eine Seite in der Pinselfarbe, Umschalt+Klick das ganze Teil. Esc beendet.',
+            'paint.done': 'Fertig',
+            'colors.title': 'Farben und Oberflächen',
+            'colors.hint': 'Lacke, Lasuren und Öle dieses Projekts. Mit Ergiebigkeit, Anstrichen und Gebindegröße rechnet das Werkstattblatt aus, wie viel du kaufen musst und was es kostet. Der Katalog hält Farben für alle Projekte; er liegt in diesem Browser.',
+            'colors.project': 'In diesem Projekt',
+            'colors.catalog': 'Katalog (alle Projekte)',
+            'colors.col.color': 'Farbe',
+            'colors.col.name': 'Name',
+            'colors.col.code': 'Code',
+            'colors.col.kind': 'Art',
+            'colors.col.coverage': 'm²/l',
+            'colors.col.coats': 'Anstriche',
+            'colors.col.packSize': 'Gebinde (l)',
+            'colors.col.packPrice': 'Preis/Gebinde',
+            'colors.col.used': 'Teile',
+            'colors.kind.opaque': 'Lack (deckend)',
+            'colors.kind.glaze': 'Lasur / Öl',
+            'colors.empty': 'Noch keine Farben. Lege eine neue an, wähle eine RAL-Farbe oder eine aus dem Katalog.',
+            'colors.catalogEmpty': 'Der Katalog ist leer. Speichere eine Projektfarbe mit „In Katalog“ hinein.',
+            'colors.add': 'Neue Farbe',
+            'colors.ralPlaceholder': 'RAL-Farbe hinzufügen: 9010, weiß …',
+            'colors.toCatalog': 'In Katalog',
+            'colors.toCatalogHint': 'Diese Farbe im Katalog speichern, für alle Projekte',
+            'colors.use': 'Hinzufügen',
+            'colors.remove': 'Entfernen',
+            'colors.newName': 'Farbe {n}',
+            'colors.removeUsed': '{name} ist an {count} Teil(en) verwendet. Beim Entfernen werden diese Seiten wieder Holz roh.',
+            'sheet.col.finish': 'Oberfläche',
+            'sheet.finishes': 'Oberflächen',
+            'sheet.finishes.hint': 'Die Seiten heißen nach den eigenen Achsen jedes Teils: oben und unten entlang seiner Höhe, vorne und hinten entlang seiner Tiefe, Start und Ende entlang seiner Breite bzw. Länge. Schnittflächen sind die Wände von Ausklinkungen und Bohrungen. Flächen gelten für einen Anstrich; die Menge umfasst alle Anstriche und ist auf ganze Gebinde aufgerundet.',
+            'sheet.finishes.perPart': 'Je Teil',
+            'sheet.finishes.col.area': 'Fläche (m²)',
+            'sheet.finishes.col.amount': 'Menge (l)',
+            'sheet.finishes.col.packs': 'Gebinde',
+            'sheet.finishes.col.cost': 'Kosten',
+            'sheet.finishes.col.sides': 'Seiten und Farben',
+            'sheet.finishes.all': 'alle Seiten',
+            'sheet.finishes.packs': '{count} × {size} l',
+            'sheet.finishes.total': 'Gesamt',
             'stock.cancel': 'Abbrechen',
             'stock.apply': 'Übernehmen',
             'stock.kind.round': 'Rundstab',
@@ -1769,11 +1982,15 @@ window.addEventListener('load', function() {
         }
     };
 
-    function csgFromMesh(mesh) {
+    // Polygons of a mesh in world space. Each carries the side of the part it lies on as
+    // `shared`, which the BSP keeps through every split; forceSide overrides it (the tool).
+    function csgFromMesh(mesh, forceSide) {
         mesh.updateMatrixWorld(true);
+        if (forceSide === undefined) ensureFaceSides(mesh);
         var geo = mesh.geometry;
         var pos = geo.attributes.position;
         var norm = geo.attributes.normal;
+        var sideAttr = geo.attributes.faceSide;
         var idx = geo.index;
         var polygons = [];
         var triCount = idx ? idx.count / 3 : pos.count / 3;
@@ -1787,14 +2004,16 @@ window.addEventListener('load', function() {
                 n.applyMatrix3(new THREE.Matrix3().getNormalMatrix(mesh.matrixWorld)).normalize();
                 vertices.push(new CSGVertex(p, n));
             }
-            polygons.push(new CSGPolygon(vertices, null));
+            var first = idx ? idx.getX(i * 3) : i * 3;
+            var side = forceSide !== undefined ? forceSide : sideAttr ? sideAttr.getX(first) : SIDE_INNER;
+            polygons.push(new CSGPolygon(vertices, side));
         }
         return polygons;
     }
 
     function csgSubtract(meshA, meshB) {
         var a = new CSGNode(csgFromMesh(meshA));
-        var b = new CSGNode(csgFromMesh(meshB));
+        var b = new CSGNode(csgFromMesh(meshB, SIDE_CUT));
         a.invert();
         a.clipTo(b);
         b.clipTo(a);
@@ -1809,12 +2028,15 @@ window.addEventListener('load', function() {
         var inverseNormalMatrix = new THREE.Matrix3().getNormalMatrix(inverseMatrix);
         var positions = [];
         var normals = [];
+        var sides = [];
         for (var i = 0; i < polygons.length; i++) {
             var vs = polygons[i].vertices;
+            var side = typeof polygons[i].shared === 'number' ? polygons[i].shared : SIDE_CUT;
             // Fan triangulate
             for (var j = 2; j < vs.length; j++) {
                 var tri = [vs[0], vs[j - 1], vs[j]];
                 for (var k = 0; k < 3; k++) {
+                    sides.push(side);
                     var p = tri[k].pos.clone().applyMatrix4(inverseMatrix);
                     var n = tri[k].normal.clone().applyMatrix3(inverseNormalMatrix).normalize();
                     positions.push(p.x, p.y, p.z);
@@ -1825,6 +2047,7 @@ window.addEventListener('load', function() {
         var newGeo = new THREE.BufferGeometry();
         newGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         newGeo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+        newGeo.setAttribute('faceSide', new THREE.BufferAttribute(new Uint8Array(sides), 1));
         return newGeo;
     }
 
@@ -2539,6 +2762,595 @@ window.addEventListener('load', function() {
         mesh.material.depthWrite = !xrayMode || isActive;
     }
 
+    // ============================================================
+    // Surface Colors
+    // ============================================================
+
+    // A part is painted per side, in its own coordinates, so the sides stay put when it is
+    // turned. Every triangle of the geometry carries the side it belongs to in the faceSide
+    // attribute: plain shapes get it from classifySides(), cuts keep the side of the part
+    // and mark the walls the tool left as 'cut' (csgSubtract passes it through `shared`).
+    var SIDE_KEYS = ['top', 'bottom', 'front', 'back', 'start', 'end', 'mantle', 'inner', 'cut'];
+    var SIDE_TOP = 0, SIDE_BOTTOM = 1, SIDE_FRONT = 2, SIDE_BACK = 3, SIDE_START = 4, SIDE_END = 5;
+    var SIDE_MANTLE = 6, SIDE_INNER = 7, SIDE_CUT = 8;
+    // A glaze or oil lets the wood show through: share of the finish color in the rendered mix
+    var GLAZE_STRENGTH = 0.55;
+    // Share of the highlight color mixed into a painted part, plus a glow so it shows on dark paint
+    var PAINT_TINT_MIX = 0.45;
+    var PAINT_TINT_GLOW = 0.2;
+    // Colors of this project: { id, name, hex, code, kind, coverage, coats, packSize, packPrice }.
+    // Saved in the model file, kept out of undo like the stock settings; parts refer to them by id.
+    var finishes = [];
+    // Colors you can buy, for all projects, kept in the browser like the stock catalog
+    var FINISH_CATALOG_KEY = 'woodmodeler_finish_catalog';
+    var finishCatalog = loadFinishCatalog();
+    var paintMode = false;
+    // Finish id the brush paints with; '' paints raw wood
+    var paintBrush = '';
+
+    function parseFinishNumber(v, min) {
+        var n = typeof v === 'number' ? v : parseFloat(String(v === undefined || v === null ? '' : v).replace(',', '.'));
+        return isFinite(n) && n >= min ? n : null;
+    }
+
+    // A finish read from a file, the catalog or the dialog; null when it has no usable color
+    function normalizeFinish(entry) {
+        if (!entry || typeof entry !== 'object') return null;
+        var hex = typeof entry.hex === 'string' ? entry.hex.trim().replace(/^#?/, '#').toLowerCase() : '';
+        if (!/^#[0-9a-f]{6}$/.test(hex)) return null;
+        var code = typeof entry.code === 'string' ? entry.code.trim() : '';
+        var name = typeof entry.name === 'string' ? entry.name.trim() : '';
+        var coats = parseFinishNumber(entry.coats, 1);
+        return {
+            id: typeof entry.id === 'string' && entry.id ? entry.id : null,
+            name: name || code || hex,
+            hex: hex,
+            code: code,
+            kind: entry.kind === 'glaze' ? 'glaze' : 'opaque',
+            // m² per liter and coat
+            coverage: parseFinishNumber(entry.coverage, 0.001),
+            coats: coats === null ? 1 : Math.round(coats),
+            // Liters per can and the price of one can
+            packSize: parseFinishNumber(entry.packSize, 0.001),
+            packPrice: parseFinishNumber(entry.packPrice, 0)
+        };
+    }
+
+    // Finish as written to a file or the catalog: unset numbers are left out
+    function serializeFinish(f, withId) {
+        var item = {};
+        if (withId) item.id = f.id;
+        item.name = f.name;
+        item.hex = f.hex;
+        if (f.code) item.code = f.code;
+        item.kind = f.kind;
+        ['coverage', 'coats', 'packSize', 'packPrice'].forEach(function(k) {
+            if (f[k] !== null && f[k] !== undefined) item[k] = f[k];
+        });
+        return item;
+    }
+
+    function newFinishId() {
+        return 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    }
+
+    function restoreFinishes(list) {
+        finishes = [];
+        var seen = {};
+        (Array.isArray(list) ? list : []).forEach(function(entry) {
+            var f = normalizeFinish(entry);
+            if (!f) return;
+            if (!f.id || seen[f.id]) f.id = newFinishId();
+            seen[f.id] = true;
+            finishes.push(f);
+        });
+    }
+
+    // Only the colors some part uses go into the file
+    function serializeFinishes() {
+        var used = {};
+        pieces.forEach(function(m) {
+            var colors = m.userData.colors || {};
+            Object.keys(colors).forEach(function(k) { used[colors[k]] = true; });
+        });
+        return finishes.filter(function(f) { return used[f.id]; }).map(function(f) { return serializeFinish(f, true); });
+    }
+
+    function loadFinishCatalog() {
+        try {
+            var list = JSON.parse(localStorage.getItem(FINISH_CATALOG_KEY) || '[]');
+            return (Array.isArray(list) ? list : []).map(normalizeFinish).filter(Boolean);
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveFinishCatalog(list) {
+        finishCatalog = (Array.isArray(list) ? list : []).map(normalizeFinish).filter(Boolean);
+        finishCatalog.forEach(function(f) { f.id = null; });
+        try {
+            localStorage.setItem(FINISH_CATALOG_KEY, JSON.stringify(finishCatalog.map(function(f) { return serializeFinish(f, false); })));
+        } catch (e) { /* storage full or blocked: the catalog still holds for this session */ }
+    }
+
+    function finishById(id) {
+        if (!id) return null;
+        for (var i = 0; i < finishes.length; i++) {
+            if (finishes[i].id === id) return finishes[i];
+        }
+        return null;
+    }
+
+    function finishLabel(f) {
+        return f.code && f.name !== f.code ? f.name + ' (' + f.code + ')' : f.name;
+    }
+
+    // Colors of a part that point at a known finish: { side: finish }
+    function pieceFinishes(ud) {
+        var out = {};
+        var colors = ud.colors || {};
+        Object.keys(colors).forEach(function(side) {
+            var f = finishById(colors[side]);
+            if (f && SIDE_KEYS.indexOf(side) !== -1) out[side] = f;
+        });
+        return out;
+    }
+
+    function pieceIsPainted(ud) {
+        return Object.keys(pieceFinishes(ud)).length > 0;
+    }
+
+    // Side of a triangle of a plain shape, from its normal n in the part's own coordinates.
+    // Round parts have two ends and a mantle. Other shapes take the axis the normal points
+    // along: up and down only when the face is level, so a slanted end (a mitered board, the
+    // slope of a wedge) counts as an end. A face that points along an axis but does not lie
+    // on the outside of the shape faces into an opening (L-bracket, frame): 'inner'.
+    function triangleSide(n, p, bb, round, tol) {
+        var ax = Math.abs(n.x), ay = Math.abs(n.y), az = Math.abs(n.z);
+        if (round) return ay > 0.999 ? (n.y > 0 ? SIDE_TOP : SIDE_BOTTOM) : SIDE_MANTLE;
+        var axis = ay > 0.999 ? 'y' : ax >= az ? 'x' : 'z';
+        var positive = n[axis] > 0;
+        if (Math.abs(n[axis]) > 0.999) {
+            var extreme = positive ? bb.max[axis] : bb.min[axis];
+            if (Math.abs(p[axis] - extreme) > tol) return SIDE_INNER;
+        }
+        if (axis === 'y') return positive ? SIDE_TOP : SIDE_BOTTOM;
+        if (axis === 'z') return positive ? SIDE_FRONT : SIDE_BACK;
+        return positive ? SIDE_END : SIDE_START;
+    }
+
+    // Per triangle side of a geometry without cut history; normals come from the positions
+    function classifySides(geo, type) {
+        var pos = geo.attributes.position;
+        var idx = geo.index;
+        var triCount = idx ? idx.count / 3 : pos.count / 3;
+        geo.computeBoundingBox();
+        var bb = geo.boundingBox;
+        var tol = 1e-3 * Math.max(bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z) + 1e-4;
+        var round = type === 'Dowel' || type === 'Tapered Leg';
+        var a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+        var n = new THREE.Vector3(), e = new THREE.Vector3();
+        var sides = new Uint8Array(triCount);
+        for (var i = 0; i < triCount; i++) {
+            var ia = idx ? idx.getX(i * 3) : i * 3;
+            var ib = idx ? idx.getX(i * 3 + 1) : i * 3 + 1;
+            var ic = idx ? idx.getX(i * 3 + 2) : i * 3 + 2;
+            a.fromBufferAttribute(pos, ia);
+            b.fromBufferAttribute(pos, ib);
+            c.fromBufferAttribute(pos, ic);
+            n.subVectors(c, b).cross(e.subVectors(a, b)).normalize();
+            sides[i] = triangleSide(n, a, bb, round, tol);
+        }
+        return sides;
+    }
+
+    // Make sure the geometry carries faceSide per vertex. A vertex shared by triangles of two
+    // sides cannot carry both, so such a geometry is split into separate triangles first.
+    function ensureFaceSides(mesh) {
+        var geo = mesh.geometry;
+        if (geo.attributes.faceSide) return;
+        var tris = classifySides(geo, mesh.userData.type);
+        var idx = geo.index;
+        if (idx) {
+            var perVertex = new Int16Array(geo.attributes.position.count).fill(-1);
+            var shared = false;
+            for (var i = 0; i < tris.length && !shared; i++) {
+                for (var j = 0; j < 3; j++) {
+                    var v = idx.getX(i * 3 + j);
+                    if (perVertex[v] !== -1 && perVertex[v] !== tris[i]) shared = true;
+                    perVertex[v] = tris[i];
+                }
+            }
+            if (!shared) {
+                var attr = new Uint8Array(perVertex.length);
+                for (var k = 0; k < perVertex.length; k++) attr[k] = perVertex[k] < 0 ? SIDE_INNER : perVertex[k];
+                geo.setAttribute('faceSide', new THREE.BufferAttribute(attr, 1));
+                return;
+            }
+            var flat = geo.toNonIndexed();
+            mesh.geometry = flat;
+            geo.dispose();
+            geo = flat;
+        }
+        var out = new Uint8Array(geo.attributes.position.count);
+        for (var t = 0; t < tris.length; t++) out[t * 3] = out[t * 3 + 1] = out[t * 3 + 2] = tris[t];
+        geo.setAttribute('faceSide', new THREE.BufferAttribute(out, 1));
+    }
+
+    // Sides the part has, in SIDE_KEYS order
+    function pieceSides(mesh) {
+        ensureFaceSides(mesh);
+        var attr = mesh.geometry.attributes.faceSide;
+        var present = {};
+        for (var i = 0; i < attr.count; i++) present[attr.getX(i)] = true;
+        return SIDE_KEYS.filter(function(k, i) { return present[i]; });
+    }
+
+    // Area of each side in mm²: { top: 1200, ... }
+    function pieceSideAreas(mesh) {
+        ensureFaceSides(mesh);
+        var geo = mesh.geometry;
+        var pos = geo.attributes.position;
+        var side = geo.attributes.faceSide;
+        var idx = geo.index;
+        var triCount = idx ? idx.count / 3 : pos.count / 3;
+        var a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), e = new THREE.Vector3();
+        var areas = {};
+        for (var i = 0; i < triCount; i++) {
+            var ia = idx ? idx.getX(i * 3) : i * 3;
+            a.fromBufferAttribute(pos, ia);
+            b.fromBufferAttribute(pos, idx ? idx.getX(i * 3 + 1) : i * 3 + 1);
+            c.fromBufferAttribute(pos, idx ? idx.getX(i * 3 + 2) : i * 3 + 2);
+            var key = SIDE_KEYS[side.getX(ia)];
+            areas[key] = (areas[key] || 0) + b.sub(a).cross(e.subVectors(c, a)).length() / 2;
+        }
+        return areas;
+    }
+
+    // Rendered color of a finish: a glaze mixes with the wood
+    function finishRenderColor(f) {
+        var color = new THREE.Color(f.hex);
+        return f.kind === 'glaze' ? new THREE.Color(WOOD_COLOR).lerp(color, GLAZE_STRENGTH) : color;
+    }
+
+    // Write the vertex colors of a part from its sides and colors, or drop them when it is
+    // raw wood all over. Call after every change of geometry or colors.
+    function applyPieceColors(mesh) {
+        var geo = mesh.geometry;
+        if (!pieceIsPainted(mesh.userData)) {
+            if (geo.attributes.color) geo.deleteAttribute('color');
+            updatePieceMaterial(mesh);
+            return;
+        }
+        ensureFaceSides(mesh);
+        geo = mesh.geometry;
+        var byFinish = pieceFinishes(mesh.userData);
+        var wood = new THREE.Color(WOOD_COLOR);
+        var lut = SIDE_KEYS.map(function(k) { return byFinish[k] ? finishRenderColor(byFinish[k]) : wood; });
+        var side = geo.attributes.faceSide;
+        var arr = new Float32Array(side.count * 3);
+        for (var i = 0; i < side.count; i++) {
+            var col = lut[side.getX(i)] || wood;
+            arr[i * 3] = col.r;
+            arr[i * 3 + 1] = col.g;
+            arr[i * 3 + 2] = col.b;
+        }
+        geo.setAttribute('color', new THREE.BufferAttribute(arr, 3));
+        updatePieceMaterial(mesh);
+    }
+
+    // Highlight a part (selection, cut, overlap) with a color, or null for its own look.
+    // Raw wood turns into the highlight color as before; a painted part keeps its paint and
+    // gets a tint, so you still see the colors you are working on.
+    function setPieceTint(mesh, hex) {
+        mesh.pieceTint = (hex === undefined || hex === null) ? null : hex;
+        updatePieceMaterial(mesh);
+    }
+
+    function updatePieceMaterial(mesh) {
+        var mat = mesh.material;
+        if (!mat || !mat.color) return;
+        var tint = mesh.pieceTint === undefined ? null : mesh.pieceTint;
+        // While painting, the selected part shows its true colors
+        if (paintMode && tint === SELECT_COLOR) tint = null;
+        if (!mat.emissive) {
+            mat.color.setHex(tint === null ? WOOD_COLOR : tint);
+            return;
+        }
+        var painted = !!(mesh.geometry && mesh.geometry.attributes.color);
+        if (!painted) {
+            mat.color.setHex(tint === null ? WOOD_COLOR : tint);
+            mat.emissive.setHex(0x000000);
+        } else if (tint === null) {
+            mat.color.setHex(0xffffff);
+            mat.emissive.setHex(0x000000);
+        } else {
+            mat.color.setHex(0xffffff).lerp(new THREE.Color(tint), PAINT_TINT_MIX);
+            mat.emissive.setHex(tint).multiplyScalar(PAINT_TINT_GLOW);
+        }
+        if (mat.vertexColors !== painted) {
+            mat.vertexColors = painted;
+            mat.needsUpdate = true;
+        }
+    }
+
+    // Set the color of some sides of a part; '' or null paints them raw wood
+    function setPieceSideColors(mesh, sides, finishId) {
+        var colors = Object.assign({}, mesh.userData.colors || {});
+        sides.forEach(function(side) {
+            if (finishId) colors[side] = finishId;
+            else delete colors[side];
+        });
+        if (Object.keys(colors).length > 0) mesh.userData.colors = colors;
+        else delete mesh.userData.colors;
+        applyPieceColors(mesh);
+    }
+
+    // Paint needed per finish over all parts. area in m² (one coat); liters, cans and cost are
+    // null when the finish lacks the coverage, can size or price to work them out.
+    function finishTotals() {
+        var byId = {};
+        var list = [];
+        pieces.forEach(function(m, index) {
+            var byFinish = pieceFinishes(m.userData);
+            var sides = Object.keys(byFinish);
+            if (sides.length === 0) return;
+            var areas = pieceSideAreas(m);
+            sides.forEach(function(side) {
+                var f = byFinish[side];
+                if (!byId[f.id]) {
+                    byId[f.id] = { finish: f, area: 0, pieces: [] };
+                    list.push(byId[f.id]);
+                }
+                byId[f.id].area += (areas[side] || 0) / 1e6;
+                if (byId[f.id].pieces.indexOf(index) === -1) byId[f.id].pieces.push(index);
+            });
+        });
+        list.forEach(function(item) {
+            var f = item.finish;
+            item.liters = f.coverage ? item.area * f.coats / f.coverage : null;
+            item.packs = item.liters !== null && f.packSize ? Math.max(1, Math.ceil(item.liters / f.packSize - 1e-9)) : null;
+            item.cost = item.packs !== null && f.packPrice !== null ? item.packs * f.packPrice : null;
+        });
+        // Same order as the project's color list
+        list.sort(function(a, b) { return finishes.indexOf(a.finish) - finishes.indexOf(b.finish); });
+        return list;
+    }
+
+    function formatArea(m2) {
+        return (Math.round(m2 * 1000) / 1000).toLocaleString(currentLang, { minimumFractionDigits: 2, maximumFractionDigits: 3 });
+    }
+
+    function formatLiters(l) {
+        return (Math.round(l * 100) / 100).toLocaleString(currentLang, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // RAL Classic: code, approximate sRGB, English and German name. Colors and German names
+    // as in github.com/pixelbrackets/ral-color-chart, English names from github.com/Dezzpil/RAL-JSON.
+    // RAL publishes no free sRGB values, so these are approximations; screen and print differ.
+    var RAL_CLASSIC = [
+        '1000 CDBA88 Green beige|Grünbeige',
+        '1001 D0B084 Beige|Beige',
+        '1002 D2AA6D Sand yellow|Sandgelb',
+        '1003 F9A800 Signal yellow|Signalgelb',
+        '1004 E49E00 Golden yellow|Goldgelb',
+        '1005 CB8E00 Honey yellow|Honiggelb',
+        '1006 E29000 Maize yellow|Maisgelb',
+        '1007 E88C00 Daffodil yellow|Narzissengelb',
+        '1011 AF804F Brown beige|Braunbeige',
+        '1012 DDAF27 Lemon yellow|Zitronengelb',
+        '1013 E3D9C6 Oyster white|Perlweiß',
+        '1014 DDC49A Ivory|Elfenbein',
+        '1015 E6D2B5 Light ivory|Hellelfenbein',
+        '1016 F1DD38 Sulfur yellow|Schwefelgelb',
+        '1017 F6A950 Saffron yellow|Safrangelb',
+        '1018 FACA30 Zinc yellow|Zinkgelb',
+        '1019 A48F7A Grey beige|Graubeige',
+        '1020 A08F65 Olive yellow|Olivgelb',
+        '1021 F6B600 Rape yellow|Rapsgelb',
+        '1023 F7B500 Traffic yellow|Verkehrsgelb',
+        '1024 BA8F4C Ochre yellow|Ockergelb',
+        '1026 FFFF00 Luminous yellow|Leuchtgelb',
+        '1027 A77F0E Curry|Currygelb',
+        '1028 FF9B00 Melon yellow|Melonengelb',
+        '1032 E2A300 Broom yellow|Ginstergelb',
+        '1033 F99A1C Dahlia yellow|Dahliengelb',
+        '1034 EB9C52 Pastel yellow|Pastellgelb',
+        '1035 908370 Pearl beige|Perlbeige',
+        '1036 80643F Pearl gold|Perlgold',
+        '1037 F09200 Sun yellow|Sonnengelb',
+        '2000 DD7907 Yellow orange|Gelborange',
+        '2001 BE4E20 Red orange|Rotorange',
+        '2002 C63927 Vermilion|Blutorange',
+        '2003 FA842B Pastel orange|Pastellorange',
+        '2004 E75B12 Pure orange|Reinorange',
+        '2005 FF2300 Luminous orange|Leuchtorange',
+        '2007 FFA421 Luminous bright orange|Leuchthellorange',
+        '2008 F3752C Bright red orange|Hellrotorange',
+        '2009 E15501 Traffic orange|Verkehrsorange',
+        '2010 D4652F Signal orange|Signalorange',
+        '2011 EC7C25 Deep orange|Tieforange',
+        '2012 DB6A50 Salmon orange|Lachsorange',
+        '2013 954527 Pearl orange|Perlorange',
+        '3000 AB2524 Flame red|Feuerrot',
+        '3001 A02128 Signal red|Signalrot',
+        '3002 A1232B Carmine red|Karminrot',
+        '3003 8D1D2C Ruby red|Rubinrot',
+        '3004 701F29 Purple red|Purpurrot',
+        '3005 5E2028 Wine red|Weinrot',
+        '3007 402225 Black red|Schwarzrot',
+        '3009 703731 Oxide red|Oxidrot',
+        '3011 7E292C Brown red|Braunrot',
+        '3012 CB8D73 Beige red|Beigerot',
+        '3013 9C322E Tomato red|Tomatenrot',
+        '3014 D47479 Antique pink|Altrosa',
+        '3015 E1A6AD Light pink|Hellrosa',
+        '3016 AC4034 Coral red|Korallenrot',
+        '3017 D3545F Rose|Rosé',
+        '3018 D14152 Strawberry red|Erdbeerrot',
+        '3020 C1121C Traffic red|Verkehrsrot',
+        '3022 D56D56 Salmon pink|Lachsrot',
+        '3024 F70000 Luminous red|Leuchtrot',
+        '3026 FF0000 Luminous bright red|Leuchthellrot',
+        '3027 B42041 Raspberry red|Himbeerrot',
+        '3028 E72512 Pure red|Reinrot',
+        '3031 AC323B Orient red|Orientrot',
+        '3032 711521 Pearl ruby red|Perlrubinrot',
+        '3033 B24C43 Pearl pink|Perlrosa',
+        '4001 8A5A83 Red lilac|Rotlila',
+        '4002 933D50 Red violet|Rotviolett',
+        '4003 D15B8F Heather violet|Erikaviolett',
+        '4004 691639 Claret violet|Bordeauxviolett',
+        '4005 83639D Blue lilac|Blaulila',
+        '4006 992572 Traffic purple|Verkehrspurpur',
+        '4007 4A203B Purple violet|Purpurviolett',
+        '4008 904684 Signal violet|Signalviolett',
+        '4009 A38995 Pastel violet|Pastellviolett',
+        '4010 C63678 Telemagenta|Telemagenta',
+        '4011 8773A1 Pearl violet|Perlviolett',
+        '4012 6B6880 Pearl blackberry|Perlbrombeer',
+        '5000 384C70 Violet blue|Violettblau',
+        '5001 1F4764 Green blue|Grünblau',
+        '5002 2B2C7C Ultramarine blue|Ultramarinblau',
+        '5003 2A3756 Sapphire blue|Saphirblau',
+        '5004 1D1F2A Black blue|Schwarzblau',
+        '5005 154889 Signal blue|Signalblau',
+        '5007 41678D Brilliant blue|Brillantblau',
+        '5008 313C48 Grey blue|Graublau',
+        '5009 2E5978 Azure blue|Azurblau',
+        '5010 13447C Gentian blue|Enzianblau',
+        '5011 232C3F Steel blue|Stahlblau',
+        '5012 3481B8 Light blue|Lichtblau',
+        '5013 232D53 Cobalt blue|Kobaltblau',
+        '5014 6C7C98 Pigeon blue|Taubenblau',
+        '5015 2874B2 Sky blue|Himmelblau',
+        '5017 0E518D Traffic blue|Verkehrsblau',
+        '5018 21888F Turquoise blue|Türkisblau',
+        '5019 1A5784 Capri blue|Capriblau',
+        '5020 0B4151 Ocean blue|Ozeanblau',
+        '5021 07737A Water blue|Wasserblau',
+        '5022 2F2A5A Night blue|Nachtblau',
+        '5023 4D668E Distant blue|Fernblau',
+        '5024 6A93B0 Pastel blue|Pastellblau',
+        '5025 296478 Pearl gentian blue|Perlenzian',
+        '5026 102C54 Pearl night blue|Perlnachtblau',
+        '6000 327662 Patina green|Patinagrün',
+        '6001 28713E Emerald green|Smaragdgrün',
+        '6002 276235 Leaf green|Laubgrün',
+        '6003 4B573E Olive green|Olivgrün',
+        '6004 0E4243 Blue green|Blaugrün',
+        '6005 0F4336 Moss green|Moosgrün',
+        '6006 40433B Grey olive|Grauoliv',
+        '6007 283424 Bottle green|Flaschengrün',
+        '6008 35382E Brown green|Braungrün',
+        '6009 26392F Fir green|Tannengrün',
+        '6010 3E753B Grass green|Grasgrün',
+        '6011 68825B Reseda green|Resedagrün',
+        '6012 31403D Black green|Schwarzgrün',
+        '6013 797C5A Reed green|Schilfgrün',
+        '6014 444337 Yellow olive|Gelboliv',
+        '6015 3D403A Black olive|Schwarzoliv',
+        '6016 026A52 Turquoise green|Türkisgrün',
+        '6017 468641 May green|Maigrün',
+        '6018 48A43F Yellow green|Gelbgrün',
+        '6019 B7D9B1 Pastel green|Weißgrün',
+        '6020 354733 Chrome green|Chromoxidgrün',
+        '6021 86A47C Pale green|Blassgrün',
+        '6022 3E3C32 Olive drab|Braunoliv',
+        '6024 008754 Traffic green|Verkehrsgrün',
+        '6025 53753C Fern green|Farngrün',
+        '6026 005D52 Opal green|Opalgrün',
+        '6027 81C0BB Light green|Lichtgrün',
+        '6028 2D5546 Pine green|Kieferngrün',
+        '6029 007243 Mint green|Minzgrün',
+        '6032 0F8558 Signal green|Signalgrün',
+        '6033 478A84 Mint turquoise|Minttürkis',
+        '6034 7FB0B2 Pastel turquoise|Pastelltürkis',
+        '6035 1B542C Pearl green|Perlgrün',
+        '6036 005D4C Pearl opal green|Perlopalgrün',
+        '6037 25E712 Pure green|Reingrün',
+        '6038 00F700 Luminous green|Leuchtgrün',
+        '7000 7E8B92 Squirrel grey|Fehgrau',
+        '7001 8F999F Silver grey|Silbergrau',
+        '7002 817F68 Olive grey|Olivgrau',
+        '7003 7A7B6D Moss grey|Moosgrau',
+        '7004 9EA0A1 Signal grey|Signalgrau',
+        '7005 6B716F Mouse grey|Mausgrau',
+        '7006 756F61 Beige grey|Beigegrau',
+        '7008 746643 Khaki grey|Khakigrau',
+        '7009 5B6259 Green grey|Grüngrau',
+        '7010 575D57 Tarpaulin grey|Zeltgrau',
+        '7011 555D61 Iron grey|Eisengrau',
+        '7012 596163 Basalt grey|Basaltgrau',
+        '7013 555548 Brown grey|Braungrau auch NATO-oliv auch Steingrau-olive',
+        '7015 51565C Slate grey|Schiefergrau',
+        '7016 373F43 Anthracite grey|Anthrazitgrau',
+        '7021 2E3234 Black grey|Schwarzgrau',
+        '7022 4B4D46 Umbra grey|Umbragrau',
+        '7023 818479 Concrete grey|Betongrau',
+        '7024 474A50 Graphite grey|Graphitgrau',
+        '7026 374447 Granite grey|Granitgrau',
+        '7030 939388 Stone grey|Steingrau',
+        '7031 5D6970 Blue grey|Blaugrau',
+        '7032 B9B9A8 Pebble grey|Kieselgrau',
+        '7033 818979 Cement grey|Zementgrau',
+        '7034 939176 Yellow grey|Gelbgrau',
+        '7035 CBD0CC Light grey|Lichtgrau',
+        '7036 9A9697 Platinum grey|Platingrau',
+        '7037 7C7F7E Dusty grey|Staubgrau',
+        '7038 B4B8B0 Agate grey|Achatgrau',
+        '7039 6B695F Quartz grey|Quarzgrau',
+        '7040 9DA3A6 Window grey|Fenstergrau',
+        '7042 8F9695 Traffic grey A|Verkehrsgrau A',
+        '7043 4E5451 Traffic grey B|Verkehrsgrau B',
+        '7044 BDBDB2 Silk grey|Seidengrau',
+        '7045 91969A Telegrey 1|Telegrau 1',
+        '7046 82898E Telegrey 2|Telegrau 2',
+        '7047 CFD0CF Telegrey 4|Telegrau 4',
+        '7048 888175 Pearl mouse grey|Perlmausgrau',
+        '8000 887142 Green brown|Grünbraun',
+        '8001 9C6B30 Ochre brown|Ockerbraun',
+        '8002 7B5141 Signal brown|Signalbraun',
+        '8003 80542F Clay brown|Lehmbraun',
+        '8004 8F4E35 Copper brown|Kupferbraun',
+        '8007 6F4A2F Fawn brown|Rehbraun',
+        '8008 6F4F28 Olive brown|Olivbraun',
+        '8011 5A3A29 Nut brown|Nussbraun',
+        '8012 673831 Red brown|Rotbraun',
+        '8014 49392D Sepia brown|Sepiabraun',
+        '8015 633A34 Chestnut brown|Kastanienbraun',
+        '8016 4C2F26 Mahogany brown|Mahagonibraun',
+        '8017 44322D Chocolate brown|Schokoladenbraun',
+        '8019 3F3A3A Grey brown|Graubraun',
+        '8022 211F20 Black brown|Schwarzbraun',
+        '8023 A65E2F Orange brown|Orangebraun',
+        '8024 79553C Beige brown|Beigebraun',
+        '8025 755C49 Pale brown|Blassbraun',
+        '8028 4E3B2B Terra brown|Terrabraun',
+        '8029 773C27 Pearl copper|Perlkupfer',
+        '9001 EFEBDC Cream|Cremeweiß',
+        '9002 DDDED4 Grey white|Grauweiß',
+        '9003 F4F8F4 Signal white|Signalweiß',
+        '9004 2E3032 Signal black|Signalschwarz',
+        '9005 0A0A0D Jet black|Tiefschwarz',
+        '9006 A5A8A6 White aluminium|Weißaluminium',
+        '9007 8F8F8C Grey aluminium|Graualuminium',
+        '9010 F7F9EF Pure white|Reinweiß',
+        '9011 292C2F Graphite black|Graphitschwarz',
+        '9016 F7FBF5 Traffic white|Verkehrsweiß',
+        '9017 2A2D2F Traffic black|Verkehrsschwarz',
+        '9018 CFD3CD Papyrus white|Papyrusweiß',
+        '9022 9C9C9C Pearl light grey|Perlhellgrau',
+        '9023 7E8182 Pearl dark grey|Perldunkelgrau'
+    ];
+
+    function ralColors() {
+        return RAL_CLASSIC.map(function(line) {
+            var m = /^(\d{4}) ([0-9A-F]{6}) (.*)\|(.*)$/.exec(line);
+            return { code: 'RAL ' + m[1], hex: '#' + m[2].toLowerCase(), name: currentLang === 'de' ? m[4] : m[3] };
+        });
+    }
+
     function addPiece(mesh) {
         pushUndo();
         scene.add(mesh);
@@ -2576,18 +3388,18 @@ window.addEventListener('load', function() {
     function selectGroup(group) {
         // Deselect any current piece/group first
         if (selectedPiece) {
-            selectedPiece.material.color.setHex(WOOD_COLOR);
+            setPieceTint(selectedPiece, null);
             selectedPiece = null;
         }
         if (selectedGroup && selectedGroup !== group) {
-            selectedGroup.children.forEach(function(c) { if (c.material) c.material.color.setHex(WOOD_COLOR); });
+            selectedGroup.children.forEach(function(c) { if (c.material) setPieceTint(c, null); });
         }
-        multiSelected.forEach(function(m) { m.material.color.setHex(WOOD_COLOR); });
+        multiSelected.forEach(function(m) { setPieceTint(m, null); });
         multiSelected.clear();
         clearOverlaps();
 
         selectedGroup = group;
-        group.children.forEach(function(c) { if (c.material) c.material.color.setHex(SELECT_COLOR); });
+        group.children.forEach(function(c) { if (c.material) setPieceTint(c, SELECT_COLOR); });
 
         // Hide piece panels
         noSelection.style.display = 'none';
@@ -2599,6 +3411,7 @@ window.addEventListener('load', function() {
         priceField.style.display = 'none';
         summarySection.style.display = 'none';
         btnSaveTemplate.style.display = 'none';
+        colorField.style.display = 'none';
 
         // Show group panel
         document.getElementById('group-panel').style.display = 'block';
@@ -2616,7 +3429,7 @@ window.addEventListener('load', function() {
 
     function deselectGroup() {
         if (!selectedGroup) return;
-        selectedGroup.children.forEach(function(c) { if (c.material) c.material.color.setHex(WOOD_COLOR); });
+        selectedGroup.children.forEach(function(c) { if (c.material) setPieceTint(c, null); });
         selectedGroup = null;
         document.getElementById('group-panel').style.display = 'none';
         if (xrayMode) pieces.forEach(applyXray);
@@ -2627,15 +3440,15 @@ window.addEventListener('load', function() {
         // Can't multi-select pieces that are already in a group
         if (mesh.userData.groupId) return;
         // Clear single selection and group selection
-        if (selectedPiece) { selectedPiece.material.color.setHex(WOOD_COLOR); selectedPiece = null; }
+        if (selectedPiece) { setPieceTint(selectedPiece, null); selectedPiece = null; }
         if (selectedGroup) deselectGroup();
 
         if (multiSelected.has(mesh)) {
             multiSelected.delete(mesh);
-            mesh.material.color.setHex(WOOD_COLOR);
+            setPieceTint(mesh, null);
         } else {
             multiSelected.add(mesh);
-            mesh.material.color.setHex(MULTI_SELECT_COLOR);
+            setPieceTint(mesh, MULTI_SELECT_COLOR);
         }
         updateGroupButton();
         // Hide piece panels while in multi-select mode
@@ -2839,16 +3652,16 @@ window.addEventListener('load', function() {
         clearOverlaps();
         // Deselect group if switching to a piece or clearing selection
         if (selectedGroup) {
-            selectedGroup.children.forEach(function(c) { if (c.material) c.material.color.setHex(WOOD_COLOR); });
+            selectedGroup.children.forEach(function(c) { if (c.material) setPieceTint(c, null); });
             selectedGroup = null;
             document.getElementById('group-panel').style.display = 'none';
         }
         // Clear multi-select highlights
-        multiSelected.forEach(function(m) { m.material.color.setHex(WOOD_COLOR); });
+        multiSelected.forEach(function(m) { setPieceTint(m, null); });
         multiSelected.clear();
         updateGroupButton();
         if (selectedPiece && selectedPiece !== mesh) {
-            selectedPiece.material.color.setHex(WOOD_COLOR);
+            setPieceTint(selectedPiece, null);
         }
         selectedPiece = mesh;
         updateActionBar();
@@ -2863,11 +3676,12 @@ window.addEventListener('load', function() {
             priceField.style.display = 'none';
             summarySection.style.display = 'none';
             btnSaveTemplate.style.display = 'none';
+            updateColorPanel();
             updateObjectList();
             updateCostSummary();
             return;
         }
-        mesh.material.color.setHex(SELECT_COLOR);
+        setPieceTint(mesh, SELECT_COLOR);
         noSelection.style.display = 'none';
         dimFields.style.display = 'block';
         posFields.style.display = 'block';
@@ -2959,6 +3773,8 @@ window.addEventListener('load', function() {
         if (!selectedPiece) return;
         var ud = selectedPiece.userData;
         sizeSummary.textContent = pieceSizeText(ud) + ' | ' + t('summary.notches') + ': ' + ud.notches;
+        // Sides and their areas follow the dimensions
+        updateColorPanel();
     }
 
     // Human-readable dimensions of a piece; shared by the side panel and the workshop sheet.
@@ -3144,6 +3960,7 @@ window.addEventListener('load', function() {
         if (newGeo) {
             mesh.geometry = newGeo;
             oldGeo.dispose();
+            applyPieceColors(mesh);
             if (labelsVisible) updateLabelPosition(mesh);
         }
     }
@@ -3499,7 +4316,404 @@ window.addEventListener('load', function() {
             row.appendChild(value);
             costItems.appendChild(row);
         });
+        // Paint: one row per color, with the cans it takes
+        finishTotals().forEach(function(item) {
+            var f = item.finish;
+            if (item.cost !== null) total += item.cost;
+            var row = document.createElement('div');
+            row.className = 'cost-row';
+            var name = document.createElement('span');
+            colorSwatch(f, name).style.marginRight = '5px';
+            name.appendChild(document.createTextNode(finishLabel(f)));
+            row.title = finishLabel(f) + (item.liters !== null ? '\n' + t('panel.cost.finish', {
+                area: formatArea(item.area), coats: f.coats, liters: formatLiters(item.liters)
+            }) : '');
+            var value = document.createElement('span');
+            value.textContent = item.cost !== null ? currency + item.cost.toFixed(2) : '–';
+            row.appendChild(name);
+            row.appendChild(value);
+            costItems.appendChild(row);
+        });
         costTotal.textContent = t('panel.costTotal') + ': ' + currency + total.toFixed(2);
+    }
+
+    // ============================================================
+    // Surface Colors UI
+    // ============================================================
+
+    var colorField = document.getElementById('color-field');
+    var colorSidesEl = document.getElementById('color-sides');
+    var paintPalette = document.getElementById('paint-palette');
+    // Axis each side faces in the part's own coordinates, shown next to its name
+    var SIDE_AXES = { top: '+Y', bottom: '−Y', front: '+Z', back: '−Z', start: '−X', end: '+X' };
+
+    function colorSwatch(f, parent) {
+        var sw = document.createElement('span');
+        sw.className = 'color-swatch' + (f ? (f.kind === 'glaze' ? ' glaze' : '') : ' raw');
+        if (f) {
+            sw.style.backgroundColor = f.hex;
+            sw.title = finishLabel(f);
+        }
+        if (parent) parent.appendChild(sw);
+        return sw;
+    }
+
+    // Options: raw wood plus the project's colors; mixed adds a disabled placeholder
+    function fillFinishSelect(select, value, mixed) {
+        select.textContent = '';
+        if (mixed) {
+            var placeholder = new Option(t('panel.colors.mixed'), '__mixed');
+            placeholder.disabled = true;
+            select.add(placeholder);
+        }
+        select.add(new Option(t('panel.colors.raw'), ''));
+        finishes.forEach(function(f) { select.add(new Option(finishLabel(f), f.id)); });
+        select.value = mixed ? '__mixed' : (finishById(value) ? value : '');
+    }
+
+    function updateColorPanel() {
+        var mesh = selectedPiece;
+        if (!mesh) {
+            colorField.style.display = 'none';
+            return;
+        }
+        colorField.style.display = 'block';
+        colorSidesEl.textContent = '';
+        var sides = pieceSides(mesh);
+        var byFinish = pieceFinishes(mesh.userData);
+        var areas = pieceSideAreas(mesh);
+        if (finishes.length === 0) {
+            sheetEl('div', 'color-hint', colorSidesEl).textContent = t('panel.colors.none');
+        }
+
+        function addRow(cls, f, name, sub, value, mixed, targetSides) {
+            var row = sheetEl('div', 'color-side-row' + (cls ? ' ' + cls : ''), colorSidesEl);
+            colorSwatch(f, row);
+            var label = sheetEl('span', 'color-side-name', row);
+            label.textContent = name;
+            if (sub) {
+                label.appendChild(document.createTextNode(' '));
+                sheetEl('small', null, label).textContent = sub;
+            }
+            label.title = name + (sub ? ' ' + sub : '');
+            var select = sheetEl('select', null, row);
+            fillFinishSelect(select, value, mixed);
+            select.addEventListener('change', function() {
+                if (!selectedPiece || select.value === '__mixed') return;
+                pushUndo();
+                setPieceSideColors(selectedPiece, targetSides, select.value);
+                updateColorPanel();
+                updateCostSummary();
+            });
+        }
+
+        var ids = sides.map(function(k) { return byFinish[k] ? byFinish[k].id : ''; });
+        var same = ids.every(function(id) { return id === ids[0]; });
+        var total = 0;
+        sides.forEach(function(k) { total += areas[k] || 0; });
+        addRow('all', same ? byFinish[sides[0]] : null, t('panel.colors.all'), formatArea(total / 1e6) + ' m²',
+            same ? ids[0] : '', !same, sides);
+        if (!same) colorSidesEl.lastChild.firstChild.className = 'color-swatch mixed';
+        sides.forEach(function(k) {
+            var sub = (SIDE_AXES[k] ? SIDE_AXES[k] + ' · ' : '') + formatArea((areas[k] || 0) / 1e6) + ' m²';
+            addRow(null, byFinish[k], t('side.' + k), sub, byFinish[k] ? byFinish[k].id : '', false, [k]);
+        });
+        sheetEl('div', 'color-hint', colorSidesEl).textContent = t('panel.colors.axes');
+        document.getElementById('btn-panel-paint').classList.toggle('active', paintMode);
+    }
+
+    // ---------- Paint mode ----------
+
+    function renderPaintPalette() {
+        paintPalette.textContent = '';
+        [null].concat(finishes).forEach(function(f) {
+            var id = f ? f.id : '';
+            var btn = sheetEl('button', id === paintBrush ? 'active' : null, paintPalette);
+            btn.type = 'button';
+            colorSwatch(f, btn);
+            btn.appendChild(document.createTextNode(f ? finishLabel(f) : t('panel.colors.raw')));
+            btn.addEventListener('click', function() {
+                paintBrush = id;
+                renderPaintPalette();
+            });
+        });
+        var manage = sheetEl('button', null, paintPalette);
+        manage.type = 'button';
+        manage.textContent = t('panel.colors.manage');
+        manage.addEventListener('click', openColorsModal);
+        var done = sheetEl('button', null, paintPalette);
+        done.type = 'button';
+        done.textContent = t('paint.done');
+        done.addEventListener('click', exitPaintMode);
+    }
+
+    function enterPaintMode() {
+        if (cutMode) exitCutMode();
+        if (rulerMode) exitRulerMode();
+        paintMode = true;
+        if (paintBrush && !finishById(paintBrush)) paintBrush = '';
+        if (!paintBrush && finishes.length > 0) paintBrush = finishes[0].id;
+        document.getElementById('btn-paint').classList.add('active');
+        showModeBanner(t('paint.hint'));
+        renderPaintPalette();
+        paintPalette.classList.add('open');
+        pieces.forEach(updatePieceMaterial);
+        updateColorPanel();
+    }
+
+    function exitPaintMode() {
+        if (!paintMode) return;
+        paintMode = false;
+        document.getElementById('btn-paint').classList.remove('active');
+        paintPalette.classList.remove('open');
+        hideModeBanner();
+        pieces.forEach(updatePieceMaterial);
+        updateColorPanel();
+    }
+
+    // Paint the side of the part a click hit, or the whole part
+    function paintAt(hit, wholePart) {
+        var mesh = hit.object;
+        var geo = mesh.geometry;
+        // Triangle order survives ensureFaceSides(), so the hit's faceIndex stays valid
+        ensureFaceSides(mesh);
+        geo = mesh.geometry;
+        var first = geo.index ? geo.index.getX(hit.faceIndex * 3) : hit.faceIndex * 3;
+        var side = SIDE_KEYS[geo.attributes.faceSide.getX(first)];
+        pushUndo();
+        setPieceSideColors(mesh, wholePart ? pieceSides(mesh) : [side], paintBrush);
+        if (mesh !== selectedPiece) selectPiece(mesh);
+        else updateColorPanel();
+        updateCostSummary();
+    }
+
+    // ---------- Colors dialog ----------
+
+    // The dialog edits copies of the project's colors and of the catalog; Apply takes both
+    var colorsDraft = null;
+
+    function colorUseCount(id) {
+        return pieces.filter(function(m) {
+            var colors = m.userData.colors || {};
+            return Object.keys(colors).some(function(k) { return colors[k] === id; });
+        }).length;
+    }
+
+    function openColorsModal() {
+        colorsDraft = {
+            project: finishes.map(function(f) { return Object.assign({}, f); }),
+            catalog: finishCatalog.map(function(f) { return Object.assign({}, f); })
+        };
+        renderColorsModal();
+        document.getElementById('colors-modal').classList.add('open');
+    }
+
+    function closeColorsModal() {
+        document.getElementById('colors-modal').classList.remove('open');
+        colorsDraft = null;
+    }
+
+    function addDraftColor(f) {
+        var copy = Object.assign({ code: '', kind: 'opaque', coverage: null, coats: 2, packSize: null, packPrice: null }, f);
+        copy.id = newFinishId();
+        colorsDraft.project.push(copy);
+        renderColorsModal();
+    }
+
+    // Same color in the catalog: same code, else same name
+    function catalogMatch(f) {
+        var code = (f.code || '').toLowerCase();
+        var name = (f.name || '').toLowerCase();
+        for (var i = 0; i < colorsDraft.catalog.length; i++) {
+            var c = colorsDraft.catalog[i];
+            if (code ? (c.code || '').toLowerCase() === code : (c.name || '').toLowerCase() === name) return i;
+        }
+        return -1;
+    }
+
+    var COLOR_NUM_FIELDS = [
+        ['coverage', 'colors.col.coverage', '0.5'],
+        ['coats', 'colors.col.coats', '1'],
+        ['packSize', 'colors.col.packSize', '0.125'],
+        ['packPrice', 'colors.col.packPrice', '0.01']
+    ];
+
+    function renderColorsModal() {
+        var container = document.getElementById('colors-rows');
+        container.textContent = '';
+        sheetEl('h4', null, container).textContent = t('colors.project');
+        if (colorsDraft.project.length === 0) {
+            sheetEl('div', 'colors-empty', container).textContent = t('colors.empty');
+        } else {
+            var table = sheetEl('table', null, container);
+            var head = sheetEl('tr', null, sheetEl('thead', null, table));
+            ['colors.col.color', 'colors.col.name', 'colors.col.code', 'colors.col.kind']
+                .concat(COLOR_NUM_FIELDS.map(function(f) { return f[1]; }))
+                .concat(['colors.col.used', null]).forEach(function(key) {
+                    sheetEl('th', null, head).textContent = key ? t(key) : '';
+                });
+            var body = sheetEl('tbody', null, table);
+            colorsDraft.project.forEach(function(row, i) {
+                var tr = sheetEl('tr', null, body);
+                var color = sheetEl('input', null, sheetEl('td', null, tr));
+                color.type = 'color';
+                color.value = row.hex;
+                color.addEventListener('input', function() { row.hex = color.value; });
+                [['name', 'colors-name'], ['code', null]].forEach(function(f) {
+                    var input = sheetEl('input', null, sheetEl('td', f[1], tr));
+                    input.type = 'text';
+                    input.value = row[f[0]] || '';
+                    input.addEventListener('input', function() { row[f[0]] = input.value; });
+                });
+                var kind = sheetEl('select', null, sheetEl('td', null, tr));
+                kind.add(new Option(t('colors.kind.opaque'), 'opaque'));
+                kind.add(new Option(t('colors.kind.glaze'), 'glaze'));
+                kind.value = row.kind === 'glaze' ? 'glaze' : 'opaque';
+                kind.addEventListener('change', function() { row.kind = kind.value; });
+                COLOR_NUM_FIELDS.forEach(function(f) {
+                    var input = sheetEl('input', null, sheetEl('td', 'colors-num', tr));
+                    input.type = 'number';
+                    input.min = f[0] === 'coats' ? '1' : '0';
+                    input.step = f[2];
+                    input.value = row[f[0]] === null || row[f[0]] === undefined ? '' : row[f[0]];
+                    input.addEventListener('input', function() { row[f[0]] = input.value; });
+                });
+                var used = colorUseCount(row.id);
+                sheetEl('td', 'num', tr).textContent = used > 0 ? String(used) : '';
+                var actions = sheetEl('td', 'colors-actions', tr);
+                var toCatalog = sheetEl('button', null, actions);
+                toCatalog.type = 'button';
+                toCatalog.textContent = t('colors.toCatalog');
+                toCatalog.title = t('colors.toCatalogHint');
+                toCatalog.addEventListener('click', function() {
+                    var f = normalizeFinish(row);
+                    if (!f) return;
+                    f.id = null;
+                    var at = catalogMatch(f);
+                    if (at >= 0) colorsDraft.catalog[at] = f;
+                    else colorsDraft.catalog.push(f);
+                    renderColorsModal();
+                });
+                var remove = sheetEl('button', null, actions);
+                remove.type = 'button';
+                remove.textContent = '×';
+                remove.title = t('colors.remove');
+                remove.addEventListener('click', function() {
+                    if (used > 0 && !confirm(t('colors.removeUsed', { name: row.name || row.hex, count: used }))) return;
+                    colorsDraft.project.splice(i, 1);
+                    renderColorsModal();
+                });
+            });
+        }
+
+        var add = sheetEl('div', 'colors-add', container);
+        var addBtn = sheetEl('button', null, add);
+        addBtn.type = 'button';
+        addBtn.textContent = t('colors.add');
+        addBtn.addEventListener('click', function() {
+            addDraftColor({ name: t('colors.newName', { n: colorsDraft.project.length + 1 }), hex: '#ffffff' });
+        });
+        var ral = sheetEl('input', null, add);
+        ral.type = 'text';
+        ral.placeholder = t('colors.ralPlaceholder');
+        ral.setAttribute('list', 'ral-colors');
+        var list = sheetEl('datalist', null, add);
+        list.id = 'ral-colors';
+        var rals = ralColors();
+        rals.forEach(function(c) {
+            var opt = sheetEl('option', null, list);
+            opt.value = c.code + ' ' + c.name;
+        });
+        // A pick from the list, or a bare number like 9010
+        function pickRal() {
+            var v = ral.value.trim().toLowerCase();
+            if (!v) return false;
+            var hit = null;
+            rals.forEach(function(c) {
+                if ((c.code + ' ' + c.name).toLowerCase() === v || c.code.toLowerCase() === v || c.code.slice(4) === v) hit = c;
+            });
+            if (!hit) return false;
+            addDraftColor({ name: hit.name, code: hit.code, hex: hit.hex });
+            return true;
+        }
+        ral.addEventListener('change', pickRal);
+        ral.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                pickRal();
+            }
+        });
+
+        sheetEl('h4', null, container).textContent = t('colors.catalog');
+        if (colorsDraft.catalog.length === 0) {
+            sheetEl('div', 'colors-empty', container).textContent = t('colors.catalogEmpty');
+            return;
+        }
+        var catTable = sheetEl('table', null, container);
+        var catHead = sheetEl('tr', null, sheetEl('thead', null, catTable));
+        ['colors.col.color', 'colors.col.name', 'colors.col.code', 'colors.col.kind']
+            .concat(COLOR_NUM_FIELDS.map(function(f) { return f[1]; }))
+            .concat([null]).forEach(function(key) {
+                sheetEl('th', null, catHead).textContent = key ? t(key) : '';
+            });
+        var catBody = sheetEl('tbody', null, catTable);
+        colorsDraft.catalog.forEach(function(f, i) {
+            var tr = sheetEl('tr', null, catBody);
+            colorSwatch(f, sheetEl('td', null, tr));
+            sheetEl('td', 'colors-name', tr).textContent = f.name;
+            sheetEl('td', null, tr).textContent = f.code || '';
+            sheetEl('td', null, tr).textContent = t(f.kind === 'glaze' ? 'colors.kind.glaze' : 'colors.kind.opaque');
+            COLOR_NUM_FIELDS.forEach(function(field) {
+                var v = f[field[0]];
+                sheetEl('td', 'num', tr).textContent = v === null || v === undefined ? '' :
+                    field[0] === 'packPrice' ? formatPrice(v) : String(v).replace('.', currentLang === 'de' ? ',' : '.');
+            });
+            var actions = sheetEl('td', 'colors-actions', tr);
+            var use = sheetEl('button', null, actions);
+            use.type = 'button';
+            use.textContent = t('colors.use');
+            use.addEventListener('click', function() { addDraftColor(Object.assign({}, f)); });
+            var remove = sheetEl('button', null, actions);
+            remove.type = 'button';
+            remove.textContent = '×';
+            remove.title = t('colors.remove');
+            remove.addEventListener('click', function() {
+                colorsDraft.catalog.splice(i, 1);
+                renderColorsModal();
+            });
+        });
+    }
+
+    function confirmColorsModal() {
+        if (!colorsDraft) return;
+        var list = colorsDraft.project.map(normalizeFinish).filter(Boolean);
+        var keep = {};
+        list.forEach(function(f) { keep[f.id] = true; });
+        // Sides painted with a removed color turn back into raw wood
+        var removed = finishes.filter(function(f) { return !keep[f.id]; }).map(function(f) { return f.id; });
+        var affected = pieces.filter(function(m) {
+            var colors = m.userData.colors || {};
+            return Object.keys(colors).some(function(k) { return removed.indexOf(colors[k]) !== -1; });
+        });
+        if (affected.length > 0) pushUndo();
+        affected.forEach(function(m) {
+            var colors = m.userData.colors;
+            Object.keys(colors).forEach(function(k) {
+                if (removed.indexOf(colors[k]) !== -1) delete colors[k];
+            });
+            if (Object.keys(colors).length === 0) delete m.userData.colors;
+        });
+        finishes = list;
+        saveFinishCatalog(colorsDraft.catalog);
+        closeColorsModal();
+        pieces.forEach(applyPieceColors);
+        if (paintMode) {
+            if (paintBrush && !finishById(paintBrush)) paintBrush = '';
+            if (!paintBrush && finishes.length > 0) paintBrush = finishes[0].id;
+            renderPaintPalette();
+        }
+        updateColorPanel();
+        updateCostSummary();
     }
 
     // ============================================================
@@ -3543,6 +4757,7 @@ window.addEventListener('load', function() {
                 sourceLength: typeof ud.sourceLength === 'number' ? ud.sourceLength : undefined,
                 sourceKerf: typeof ud.sourceKerf === 'number' ? ud.sourceKerf : undefined,
                 groupId: ud.groupId || null,
+                colors: ud.colors && Object.keys(ud.colors).length > 0 ? Object.assign({}, ud.colors) : undefined,
                 px: _wp.x, py: _wp.y, pz: _wp.z,
                 rx: _we.x, ry: _we.y, rz: _we.z
             };
@@ -3662,6 +4877,13 @@ window.addEventListener('load', function() {
             if (typeof entry.sourceLength === 'number') mesh.userData.sourceLength = entry.sourceLength;
             if (typeof entry.sourceKerf === 'number') mesh.userData.sourceKerf = entry.sourceKerf;
             mesh.userData.groupId = entry.groupId || null;
+            if (entry.colors && typeof entry.colors === 'object') {
+                var colors = {};
+                Object.keys(entry.colors).forEach(function(side) {
+                    if (SIDE_KEYS.indexOf(side) !== -1 && typeof entry.colors[side] === 'string') colors[side] = entry.colors[side];
+                });
+                if (Object.keys(colors).length > 0) mesh.userData.colors = colors;
+            }
             if (entry.type === 'Board' || entry.type === 'Wedge' || entry.type === 'L-Bracket') {
                 mesh.userData.w = entry.w; mesh.userData.h = entry.h; mesh.userData.d = entry.d;
                 if (entry.type === 'Board') {
@@ -3729,6 +4951,7 @@ window.addEventListener('load', function() {
             });
             mesh.userData.csgModified = true;
         });
+        pieces.forEach(applyPieceColors);
 
         // Second pass: restore groups and attach children
         groupsData.forEach(function(gEntry) {
@@ -3793,7 +5016,8 @@ window.addEventListener('load', function() {
             groups: sceneData.groups || [],
             rulers: sceneData.rulers || [],
             stock: serializeStock(),
-            stockOptions: serializeStockOptions()
+            stockOptions: serializeStockOptions(),
+            finishes: serializeFinishes()
         };
         var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         var url = URL.createObjectURL(blob);
@@ -3832,6 +5056,7 @@ window.addEventListener('load', function() {
                     if (!confirm(t('load.replace'))) return;
                 }
                 restoreStock(data.stock, data.stockOptions);
+                restoreFinishes(data.finishes);
                 restoreScene(JSON.stringify(scenePayload));
                 updateObjectList();
             } catch (err) {
@@ -4203,13 +5428,14 @@ window.addEventListener('load', function() {
     }
 
     function enterCutMode() {
+        if (paintMode) exitPaintMode();
         cutMode = true;
         cutTarget = null;
         document.getElementById('menu-cut').classList.add('active');
         showModeBanner(t('cut.hint') || 'Cut: pick target, then tool');
         // Deselect current
         if (selectedPiece) {
-            selectedPiece.material.color.setHex(WOOD_COLOR);
+            setPieceTint(selectedPiece, null);
             selectedPiece = null;
         }
     }
@@ -4217,7 +5443,7 @@ window.addEventListener('load', function() {
     function exitCutMode() {
         cutMode = false;
         if (cutTarget) {
-            cutTarget.material.color.setHex(WOOD_COLOR);
+            setPieceTint(cutTarget, null);
             cutTarget = null;
         }
         document.getElementById('menu-cut').classList.remove('active');
@@ -4287,17 +5513,18 @@ window.addEventListener('load', function() {
             target.geometry = newGeo;
             target.userData.notches++;
             target.userData.csgModified = true;
+            applyPieceColors(target);
             if (!legacyLocked) {
                 if (!Array.isArray(target.userData.csgOps)) target.userData.csgOps = [];
                 target.userData.csgOps.push({ op: 'subtract', tool: toolSpec });
             }
-            target.material.color.setHex(WOOD_COLOR);
-            tool.material.color.setHex(WOOD_COLOR);
+            setPieceTint(target, null);
+            setPieceTint(tool, null);
             selectPiece(target);
         } catch (e) {
             console.error('CSG cut failed:', e);
-            target.material.color.setHex(WOOD_COLOR);
-            tool.material.color.setHex(WOOD_COLOR);
+            setPieceTint(target, null);
+            setPieceTint(tool, null);
         }
         exitCutMode();
     }
@@ -4320,6 +5547,7 @@ window.addEventListener('load', function() {
     }
 
     function enterRulerMode() {
+        if (paintMode) exitPaintMode();
         rulerMode = true;
         rulerFirstPoint = null;
         document.getElementById('btn-ruler').classList.add('active');
@@ -4748,8 +5976,8 @@ window.addEventListener('load', function() {
 
     function clearOverlaps() {
         overlapHighlighted.forEach(function(m) {
-            if (m === selectedPiece) m.material.color.setHex(SELECT_COLOR);
-            else m.material.color.setHex(WOOD_COLOR);
+            if (m === selectedPiece) setPieceTint(m, SELECT_COLOR);
+            else setPieceTint(m, null);
         });
         overlapHighlighted = [];
         overlapList.style.display = 'none';
@@ -4766,11 +5994,11 @@ window.addEventListener('load', function() {
                 if (boxA.intersectsBox(boxB)) {
                     pairs.push([pieces[i], pieces[j]]);
                     if (overlapHighlighted.indexOf(pieces[i]) === -1) {
-                        pieces[i].material.color.setHex(OVERLAP_COLOR);
+                        setPieceTint(pieces[i], OVERLAP_COLOR);
                         overlapHighlighted.push(pieces[i]);
                     }
                     if (overlapHighlighted.indexOf(pieces[j]) === -1) {
-                        pieces[j].material.color.setHex(OVERLAP_COLOR);
+                        setPieceTint(pieces[j], OVERLAP_COLOR);
                         overlapHighlighted.push(pieces[j]);
                     }
                 }
@@ -4834,6 +6062,7 @@ window.addEventListener('load', function() {
         mesh.userData.price = ud.price || 0;
         mesh.userData.priceMode = ud.priceMode || 'fixed';
         mesh.userData.bought = ud.bought === true;
+        if (ud.colors) mesh.userData.colors = Object.assign({}, ud.colors);
         if (ud.type === 'Board' || ud.type === 'Wedge' || ud.type === 'L-Bracket') {
             mesh.userData.w = ud.w; mesh.userData.h = ud.h; mesh.userData.d = ud.d;
         } else if (ud.type === 'Dowel') {
@@ -4841,6 +6070,7 @@ window.addEventListener('load', function() {
         } else if (ud.type === 'Tapered Leg') {
             mesh.userData.rTop = ud.rTop; mesh.userData.rBottom = ud.rBottom; mesh.userData.h = ud.h;
         }
+        applyPieceColors(mesh);
         addPiece(mesh);
     }
 
@@ -5099,6 +6329,11 @@ window.addEventListener('load', function() {
             mesh.userData.label = label;
             mesh.userData.price = newPrice;
             mesh.userData.priceMode = priceMode;
+            // The parts keep the colors of their sides; the new ends count as the old ones
+            if (ud.colors) {
+                mesh.userData.colors = Object.assign({}, ud.colors);
+                applyPieceColors(mesh);
+            }
             if (sourceId) {
                 mesh.userData.sourceId = sourceId;
                 mesh.userData.sourcePrice = sourcePrice;
@@ -5447,11 +6682,13 @@ window.addEventListener('load', function() {
                 (opts.only ? [opts.only] : pieces).forEach(function(m) {
                     var mat = m.material;
                     matState.push({
-                        mat: mat, color: mat.color.getHex(), transparent: mat.transparent,
+                        mesh: m, tint: m.pieceTint === undefined ? null : m.pieceTint,
+                        mat: mat, transparent: mat.transparent,
                         opacity: mat.opacity, depthWrite: mat.depthWrite
                     });
                     var ghost = !!opts.highlight && opts.highlight.indexOf(m) === -1;
-                    mat.color.setHex(opts.highlight && !ghost ? SHEET_HIGHLIGHT_COLOR : WOOD_COLOR);
+                    // Painted parts show their colors; a highlight tints them like the selection
+                    setPieceTint(m, opts.highlight && !ghost ? SHEET_HIGHLIGHT_COLOR : null);
                     setTransparent(mat, ghost);
                     mat.opacity = ghost ? SHEET_GHOST_OPACITY : 1.0;
                     mat.depthWrite = !ghost;
@@ -5477,7 +6714,7 @@ window.addEventListener('load', function() {
             // Reverse order so a material shared by two pieces ends up with its original state
             for (var i = matState.length - 1; i >= 0; i--) {
                 var s = matState[i];
-                s.mat.color.setHex(s.color);
+                setPieceTint(s.mesh, s.tint);
                 setTransparent(s.mat, s.transparent);
                 s.mat.opacity = s.opacity;
                 s.mat.depthWrite = s.depthWrite;
@@ -5977,6 +7214,13 @@ window.addEventListener('load', function() {
         return Math.min(aS, aE) + '/' + Math.max(aS, aE);
     }
 
+    // Colors of a part as part of its identity: sides in fixed order, known finishes only
+    function pieceColorKey(ud) {
+        var byFinish = pieceFinishes(ud);
+        return SIDE_KEYS.filter(function(k) { return byFinish[k]; })
+            .map(function(k) { return k + '=' + byFinish[k].id; }).join(',');
+    }
+
     // Merge identical parts into one parts list row so the list stays short. Cuts are part of
     // the identity; legacy cut pieces have no recorded csgOps, so they are never merged.
     function groupIdenticalPieces() {
@@ -5988,11 +7232,13 @@ window.addEventListener('load', function() {
             // A plain board is the same part however it lies in the model. Miters and cuts are
             // tied to a specific axis, so those boards keep their dimension order.
             var hasCuts = Array.isArray(ud.csgOps) && ud.csgOps.length > 0;
-            var sizeKey = (ud.type === 'Board' && !pieceMiterText(ud) && !hasCuts)
+            // Colors sit on sides of the part's own axes, so a painted board keeps its order too
+            var colorKey = pieceColorKey(ud);
+            var sizeKey = (ud.type === 'Board' && !pieceMiterText(ud) && !hasCuts && !colorKey)
                 ? [ud.w, ud.h, ud.d].sort(function(a, b) { return a - b; }).join('x')
                 : pieceSizeText(ud);
             var key = legacyCut ? 'legacy|' + i : [
-                ud.type, sizeKey, pieceMiterKey(ud, hasCuts), ud.notches || 0, JSON.stringify(ud.csgOps || [])
+                ud.type, sizeKey, pieceMiterKey(ud, hasCuts), ud.notches || 0, JSON.stringify(ud.csgOps || []), colorKey
             ].join('|');
             if (!byKey[key]) {
                 byKey[key] = { mesh: m, members: [], labels: [] };
@@ -6036,7 +7282,10 @@ window.addEventListener('load', function() {
     function buildPartsTable(parent, rows, stockLetters) {
         var table = sheetEl('table', null, parent);
         var headRow = sheetEl('tr', null, sheetEl('thead', null, table));
-        ['sheet.col.pos', 'sheet.col.image', 'sheet.col.qty', 'csv.label', 'csv.type', 'sheet.col.dims', 'sheet.col.miter', 'csv.notches', 'sheet.col.stock'].forEach(function(key) {
+        var painted = pieces.some(function(m) { return pieceIsPainted(m.userData); });
+        var cols = ['sheet.col.pos', 'sheet.col.image', 'sheet.col.qty', 'csv.label', 'csv.type', 'sheet.col.dims', 'sheet.col.miter', 'csv.notches', 'sheet.col.stock'];
+        if (painted) cols.push('sheet.col.finish');
+        cols.forEach(function(key) {
             sheetEl('th', null, headRow).textContent = t(key);
         });
         var body = sheetEl('tbody', null, table);
@@ -6055,6 +7304,112 @@ window.addEventListener('load', function() {
             sheetEl('td', 'sheet-dims', row).textContent = pieceMiterText(ud);
             sheetEl('td', 'num', row).textContent = String(ud.notches || 0);
             sheetEl('td', null, row).textContent = (stockLetters && stockLetters[r + 1]) || '';
+            if (painted) buildFinishList(sheetEl('td', null, row), group.mesh, false);
+        });
+    }
+
+    // Colors of a part with the sides they go on: [{ finish, sides: ['top', …], all, area }].
+    // area is the painted area of one part in mm².
+    function pieceFinishSummary(mesh) {
+        var byFinish = pieceFinishes(mesh.userData);
+        var sides = pieceSides(mesh);
+        var areas = pieceSideAreas(mesh);
+        var list = [];
+        sides.forEach(function(k) {
+            var f = byFinish[k];
+            if (!f) return;
+            var item = list.filter(function(x) { return x.finish === f; })[0];
+            if (!item) {
+                item = { finish: f, sides: [], all: false, area: 0 };
+                list.push(item);
+            }
+            item.sides.push(k);
+            item.area += areas[k] || 0;
+        });
+        list.forEach(function(item) { item.all = item.sides.length === sides.length; });
+        return list;
+    }
+
+    // "■ Pure white: top, front" per color; withArea adds the area of one part
+    function buildFinishList(parent, mesh, withArea) {
+        var ul = sheetEl('ul', 'sheet-finish-list', parent);
+        pieceFinishSummary(mesh).forEach(function(item) {
+            var li = sheetEl('li', null, ul);
+            var sw = sheetEl('span', 'sheet-swatch', li);
+            sw.style.backgroundColor = item.finish.hex;
+            var sides = item.all ? t('sheet.finishes.all') : item.sides.map(function(k) { return t('side.' + k); }).join(', ');
+            li.appendChild(document.createTextNode(finishLabel(item.finish) + ': ' + sides +
+                (withArea ? ' (' + formatArea(item.area / 1e6) + ' m²)' : '')));
+        });
+        return ul;
+    }
+
+    // Surfaces page: what paint to buy, then which sides of which part get which color
+    function buildFinishPage(parent, rows) {
+        var totals = finishTotals();
+        if (totals.length === 0) return;
+        var partNumbers = [];
+        rows.forEach(function(group, r) {
+            group.members.forEach(function(i) { partNumbers[i] = r + 1; });
+        });
+        var page = sheetEl('section', 'sheet-page sheet-finishes', parent);
+        sheetEl('h2', null, page).textContent = t('sheet.finishes');
+        sheetEl('p', 'sheet-cuts-hint', page).textContent = t('sheet.finishes.hint');
+        var table = sheetEl('table', null, page);
+        var head = sheetEl('tr', null, sheetEl('thead', null, table));
+        ['colors.col.color', 'colors.col.code', 'colors.col.kind', 'sheet.finishes.col.area', 'colors.col.coats',
+            'sheet.finishes.col.amount', 'sheet.finishes.col.packs', 'sheet.finishes.col.cost', 'sheet.col.pos'].forEach(function(key) {
+            sheetEl('th', null, head).textContent = t(key);
+        });
+        var body = sheetEl('tbody', null, table);
+        var sum = 0;
+        var priced = false;
+        totals.forEach(function(item) {
+            var f = item.finish;
+            var tr = sheetEl('tr', null, body);
+            var name = sheetEl('td', null, tr);
+            sheetEl('span', 'sheet-swatch', name).style.backgroundColor = f.hex;
+            name.appendChild(document.createTextNode(f.name));
+            sheetEl('td', null, tr).textContent = f.code || '';
+            sheetEl('td', null, tr).textContent = t(f.kind === 'glaze' ? 'colors.kind.glaze' : 'colors.kind.opaque');
+            sheetEl('td', 'num', tr).textContent = formatArea(item.area);
+            sheetEl('td', 'num', tr).textContent = String(f.coats);
+            sheetEl('td', 'num', tr).textContent = item.liters !== null ? formatLiters(item.liters) : '–';
+            sheetEl('td', 'num', tr).textContent = item.packs !== null
+                ? t('sheet.finishes.packs', { count: item.packs, size: f.packSize.toLocaleString(currentLang, { maximumFractionDigits: 3 }) }) : '–';
+            sheetEl('td', 'num', tr).textContent = item.cost !== null ? formatMoney(item.cost) : '–';
+            sheetEl('td', null, tr).textContent = formatPartNumbers(item.pieces, partNumbers);
+            if (item.cost !== null) {
+                sum += item.cost;
+                priced = true;
+            }
+        });
+        if (priced) {
+            var tr = sheetEl('tr', null, body);
+            var label = sheetEl('td', null, tr);
+            label.colSpan = 7;
+            label.textContent = t('sheet.finishes.total');
+            sheetEl('td', 'num', tr).textContent = formatMoney(sum);
+            sheetEl('td', null, tr);
+        }
+
+        sheetEl('h3', null, page).textContent = t('sheet.finishes.perPart');
+        var partTable = sheetEl('table', null, page);
+        var partHead = sheetEl('tr', null, sheetEl('thead', null, partTable));
+        ['sheet.col.pos', 'sheet.col.qty', 'csv.label', 'sheet.col.dims', 'sheet.finishes.col.sides'].forEach(function(key) {
+            sheetEl('th', null, partHead).textContent = t(key);
+        });
+        var partBody = sheetEl('tbody', null, partTable);
+        rows.forEach(function(group, r) {
+            if (!pieceIsPainted(group.mesh.userData)) return;
+            var ud = group.mesh.userData;
+            var tr = sheetEl('tr', null, partBody);
+            sheetEl('td', 'num', tr).textContent = String(r + 1);
+            sheetEl('td', 'num', tr).textContent = group.members.length + '×';
+            // Labels can come from loaded files — always textContent, never innerHTML
+            sheetEl('td', null, tr).textContent = commonLabel(group.labels) || typeName(ud.type);
+            sheetEl('td', 'sheet-dims', tr).textContent = pieceSizeText(ud);
+            buildFinishList(sheetEl('td', null, tr), group.mesh, true);
         });
     }
 
@@ -8491,6 +9846,7 @@ window.addEventListener('load', function() {
         var partsPage = sheetEl('section', 'sheet-page sheet-parts', printSheet);
         sheetEl('h2', null, partsPage).textContent = t('sheet.partsList');
         buildPartsTable(partsPage, rows, stockLettersByPos(stockPlan));
+        buildFinishPage(printSheet, rows);
         buildStockPage(printSheet, stockPlan);
         buildCutsPage(printSheet, rows);
         return printSheet;
@@ -8546,9 +9902,10 @@ window.addEventListener('load', function() {
         isDragging = false;
         dragStarted = false;
 
-        // Don't start object drag in cut or ruler mode
+        // Don't start object drag in cut, ruler or paint mode
         if (cutMode) return;
         if (rulerMode) return;
+        if (paintMode) return;
 
         // Ctrl+click is reserved for multi-select (handled in click handler).
         // Skip drag/select setup so the click can toggle selection cleanly.
@@ -8718,6 +10075,11 @@ window.addEventListener('load', function() {
             return;
         }
 
+        if (paintMode) {
+            if (intersects.length > 0) paintAt(intersects[0], e.shiftKey);
+            return;
+        }
+
         // Click on a ruler label (outside ruler mode) → delete that ruler
         if (rulers.length > 0) {
             var rIdx = pickRulerSpriteAt(e);
@@ -8735,9 +10097,9 @@ window.addEventListener('load', function() {
                 var hit = intersects[0].object;
                 if (!cutTarget) {
                     cutTarget = hit;
-                    cutTarget.material.color.setHex(CUT_TARGET_COLOR);
+                    setPieceTint(cutTarget, CUT_TARGET_COLOR);
                 } else if (hit !== cutTarget) {
-                    hit.material.color.setHex(CUT_TOOL_COLOR);
+                    setPieceTint(hit, CUT_TOOL_COLOR);
                     setTimeout(function() {
                         performCut(cutTarget, hit);
                     }, 100);
@@ -8761,7 +10123,7 @@ window.addEventListener('load', function() {
             selectPiece(clickedMesh);
         } else {
             deselectGroup();
-            multiSelected.forEach(function(m) { m.material.color.setHex(WOOD_COLOR); });
+            multiSelected.forEach(function(m) { setPieceTint(m, null); });
             multiSelected.clear();
             updateGroupButton();
             selectPiece(null);
@@ -8963,6 +10325,17 @@ window.addEventListener('load', function() {
         else enterRulerMode();
     });
 
+    function togglePaintMode() {
+        if (paintMode) exitPaintMode();
+        else enterPaintMode();
+    }
+    document.getElementById('btn-paint').addEventListener('click', togglePaintMode);
+    document.getElementById('btn-panel-paint').addEventListener('click', togglePaintMode);
+    document.getElementById('btn-panel-colors').addEventListener('click', openColorsModal);
+    document.getElementById('menu-colors').addEventListener('click', openColorsModal);
+    document.getElementById('colors-cancel').addEventListener('click', closeColorsModal);
+    document.getElementById('colors-confirm').addEventListener('click', confirmColorsModal);
+
     // Tools menu items
     document.getElementById('menu-cut').addEventListener('click', function() {
         if (cutMode) exitCutMode();
@@ -9065,7 +10438,7 @@ window.addEventListener('load', function() {
         if (e.target.files.length > 0 && catalogDraft) importCatalog(e.target.files[0]);
         e.target.value = '';
     });
-    [['stock-modal', closeStockModal], ['catalog-modal', closeCatalogModal]].forEach(function(pair) {
+    [['stock-modal', closeStockModal], ['catalog-modal', closeCatalogModal], ['colors-modal', closeColorsModal]].forEach(function(pair) {
         var modal = document.getElementById(pair[0]);
         var mouseDownOnOverlay = false;
         modal.addEventListener('mousedown', function(e) {
@@ -9169,6 +10542,8 @@ window.addEventListener('load', function() {
                 }
             } else if (cutMode) {
                 exitCutMode();
+            } else if (paintMode) {
+                exitPaintMode();
             }
         }
     });
@@ -9203,6 +10578,11 @@ window.addEventListener('load', function() {
         updateSizeSummary();
         updateCostSummary();
         buildDropdownMenus();
+        if (paintMode) {
+            renderPaintPalette();
+            showModeBanner(t('paint.hint'));
+        }
+        if (colorsDraft) renderColorsModal();
         var modal = document.getElementById('split-modal');
         if (modal && modal.classList.contains('open')) {
             var axisSel = document.getElementById('split-axis');
@@ -9285,7 +10665,21 @@ window.addEventListener('load', function() {
             packStock: packStock,
             parseStockOffers: parseStockOffers,
             setStockCatalog: saveStockCatalog,
-            getStockCatalog: function() { return stockCatalog; }
+            getStockCatalog: function() { return stockCatalog; },
+            // Surface colors: project colors, sides of a part and the paint they need
+            setFinishes: restoreFinishes,
+            getFinishes: function() { return finishes; },
+            serializeFinishes: serializeFinishes,
+            setFinishCatalog: saveFinishCatalog,
+            getFinishCatalog: function() { return finishCatalog; },
+            setPieceSideColors: setPieceSideColors,
+            pieceSides: pieceSides,
+            pieceSideAreas: pieceSideAreas,
+            finishTotals: finishTotals,
+            openColorsModal: openColorsModal,
+            enterPaintMode: enterPaintMode,
+            exitPaintMode: exitPaintMode,
+            selectPiece: selectPiece
         };
         window.dispatchEvent(new Event('app-ready'));
     }

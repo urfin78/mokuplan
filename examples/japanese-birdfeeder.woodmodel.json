@@ -80,6 +80,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
       "px": -67.5000, "py": 119.5000, "pz": -67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 215, "d": 28
     },
@@ -88,6 +89,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
       "px": -67.5000, "py": 119.5000, "pz": 67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 215, "d": 28
     },
@@ -96,6 +98,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
       "px": 67.5000, "py": 119.5000, "pz": -67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 215, "d": 28
     },
@@ -104,6 +107,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
       "px": 67.5000, "py": 119.5000, "pz": 67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 215, "d": 28
     },
@@ -182,6 +186,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": -22.4365, "py": 266.8077, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.663225,
       "w": 32, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 128.00
@@ -191,6 +196,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": -51.7869, "py": 247.3471, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.523599,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -200,6 +206,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": -87.0241, "py": 230.1608, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.383972,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -209,6 +216,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": -124.3102, "py": 218.0458, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.244346,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 90.00, "angleEnd": 86.00
@@ -218,6 +226,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": 22.4365, "py": 266.8077, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.663225,
       "w": 32, "h": 10, "d": 265,
       "angleStart": 128.00, "angleEnd": 86.00
@@ -227,6 +236,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": 51.7869, "py": 247.3471, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.523599,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -236,6 +246,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": 87.0241, "py": 230.1608, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.383972,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -245,6 +256,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
       "px": 124.3102, "py": 218.0458, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.244346,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 90.00
@@ -277,6 +289,10 @@
   ],
   "rulers": [
     { "p1": [-100, 0, 100], "p2": [100, 0, 100] }
+  ],
+  "finishes": [
+    { "id": "roof", "name": "Oxidrot", "hex": "#5e2028", "code": "RAL 3009", "kind": "opaque", "coverage": 10, "coats": 2, "packSize": 0.375, "packPrice": 11.95 },
+    { "id": "oil", "name": "Leinölfirnis", "hex": "#b5651d", "kind": "glaze", "coverage": 12, "coats": 2, "packSize": 0.5, "packPrice": 8.5 }
   ],
   "stock": [
     { "profile": "10x40", "name": "Leiste", "length": 2000, "kerf": 3, "parts": ["10x39.8"] },

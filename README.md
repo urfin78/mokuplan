@@ -36,6 +36,12 @@ The workshop sheet lists the stock to buy on page 1 with the same letters and pr
 | --- | --- |
 | ![Workshop sheet with four dimensioned views of a stool](docs/screenshots/workshop-views.png) | ![Parts list with pictures, quantities and dimensions](docs/screenshots/workshop-parts.png) |
 
+### Paint and finish
+
+Every side of a part can get its own color: a birdhouse white outside and raw inside, a stool with an oiled seat and painted legs. The sides belong to the part, not to the room, so they stay put when you turn it: top and bottom, front and back, start and end, the curved face of a dowel, the inner faces of a frame or L-bracket, and the cut faces left by a joint. Pick a color per side under Surface in the side panel, or switch on the brush in the toolbar and click the sides in the 3D view (Shift+click paints the whole part).
+
+File → Colors holds the paints, glazes and oils of the project. Start from a RAL Classic color, a color of your own, or one from the color catalog, which keeps colors for all your projects in the browser. Give a color its coverage, number of coats, can size and price, and the workshop sheet works out the area, how many cans to buy and what they cost. The views and parts list on the sheet show the colors, and a Surfaces page lists which side of which part gets which color. Paint with a price also counts in the cost summary.
+
 ### Start from a template
 
 The `+ Add` menu has metric stock parts such as battens, planks and dowel pins, and you can save your own. Assembly templates build a whole construction from a few parameters, like this Japanese lantern.
@@ -102,6 +108,7 @@ To explore a finished model, download [`examples/stool.woodmodel.json`](examples
 - Object list and cost summary grouped by piece of stock (A, B, …), collapsible; stock list, "From stock" column and to-scale cutting plan on the workshop sheet; split parts keep their source length and kerf for the offcut
 - Stock catalog with lengths and prices per cross-section, kept in the browser, with JSON export and import (`.woodstock.json`); cutting plan with the cheapest mix of lengths, exact where it can be proven; stock dialog as a shopping list with per-stock cutting plan, "Sawn from" choice and length/price fields; Find a cheaper plan proposes catalog cross-sections, catalog lengths and prices instead of the project's, and repacking split parts
 - Parts can be marked as bought ready-made, so they are not sawn from stock
+- Colors per side of a part (paint or glaze/oil), set in the side panel or with the brush in the 3D view; project colors with RAL Classic picker, coverage, coats, can size and price; color catalog kept in the browser; colored views, a Surface column and a Surfaces page with areas, cans and costs on the workshop sheet
 - CSV cut list with dimensions, types, notch counts and costs
 - PNG export of the current view
 
@@ -122,10 +129,12 @@ The UI is available in English and German. The language is detected from your br
 | Recenter on the model | Double-click empty space |
 | Focus the selection | F |
 | Cancel a ruler measurement | Esc |
+| Paint a whole part (brush on) | Shift+click |
+| Stop painting | Esc |
 
 ## Your data
 
-Projects are saved as files on your computer, and custom templates stay in your browser's local storage.
+Projects are saved as files on your computer, and custom templates, the stock catalog and the color catalog stay in your browser's local storage.
 
 ## Development
 
