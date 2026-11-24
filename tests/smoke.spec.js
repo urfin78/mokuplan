@@ -396,6 +396,73 @@ test('workshop sheet prints a shape with many angled edges as a full-size templa
     expect(result.lines).toEqual([true, true]);
 });
 
+test('workshop sheet draws rows with the same outline once and asks to print their template per part', async ({ page }) => {
+    await gotoApp(page);
+
+    const result = await page.evaluate(() => {
+        const app = window.__app;
+        app.setLanguage('en');
+        const notches = [-120, -80, -40, 0, 40, 80, 120].map((px) => ({
+            op: 'subtract',
+            tool: { type: 'Board', local: true, px, py: 50, pz: 0, rx: 0, ry: 0, rz: Math.PI / 4, w: 30, h: 30, d: 30 }
+        }));
+        // Half a hole in each of two layers glued together: the same outline, the groove on
+        // the front of one layer and on the back of the other
+        const layer = (id, pz) => {
+            const csgOps = notches.concat([{
+                op: 'subtract',
+                tool: { type: 'Dowel', local: true, px: 0, py: 0, pz, rx: 0, ry: 0, rz: 0, r: 3, h: 120 }
+            }]);
+            return {
+                type: 'Board', id, label: 'Crest ' + id, px: 0, py: 0, pz: id * 40, rx: 0, ry: 0, rz: 0,
+                w: 300, h: 100, d: 18, notches: csgOps.length, csgModified: true, csgOps
+            };
+        };
+        app.restoreScene(JSON.stringify({ pieces: [layer(1, 9), layer(2, -9)], groups: [] }));
+        const sheet = app.buildWorkshopSheet();
+        return {
+            captions: Array.from(sheet.querySelectorAll('.sheet-cuts .sheet-contour figcaption')).map((c) => c.textContent),
+            holes: Array.from(sheet.querySelectorAll('.sheet-cuts .sheet-contour .sheet-cuts-hint')).map((p) => p.textContent).filter((s) => s.startsWith('Holes')),
+            heads: Array.from(sheet.querySelectorAll('.sheet-template-head span')).map((s) => s.textContent)
+        };
+    });
+
+    expect(result.captions).toEqual(['Pos. 1–2 · 2× Crest · 300 x 100 x 18 mm']);
+    expect(result.holes).toHaveLength(1);
+    expect(result.holes[0]).toContain('Pos. 1: Ø6 as a groove 3 mm deep on the drawn side');
+    expect(result.holes[0]).toContain('Pos. 2: Ø6 as a groove 3 mm deep on the back');
+    expect(result.heads).toEqual(['Pos. 1–2 · Crest · sheet 1 of 2 · print 2×', 'Pos. 1–2 · Crest · sheet 2 of 2 · print 2×']);
+});
+
+test('workshop sheet shows a detail repeated at several places once', async ({ page }) => {
+    await gotoApp(page);
+
+    const result = await page.evaluate(() => {
+        const app = window.__app;
+        app.setLanguage('en');
+        const base = { notches: 0, csgModified: false, rx: 0, ry: 0, rz: 0 };
+        app.restoreScene(JSON.stringify({
+            pieces: [
+                { ...base, type: 'Board', id: 1, label: 'Block', px: 0, py: 100, pz: 0, w: 200, h: 200, d: 200 },
+                { ...base, type: 'Dowel', id: 2, label: 'Hidden Pin', px: 0, py: 100, pz: 0, r: 5, h: 30 },
+                { ...base, type: 'Board', id: 3, label: 'Block', px: 800, py: 100, pz: 0, w: 200, h: 200, d: 200 },
+                { ...base, type: 'Dowel', id: 4, label: 'Hidden Pin', px: 800, py: 100, pz: 0, r: 5, h: 30 }
+            ],
+            groups: []
+        }));
+        const sheet = app.buildWorkshopSheet();
+        return {
+            details: Array.from(sheet.querySelectorAll('.sheet-detail figcaption')).map((c) => c.textContent),
+            letters: Array.from(sheet.querySelectorAll('.sheet-first svg text')).map((s) => s.textContent).filter((s) => /^[A-Z]$/.test(s))
+        };
+    });
+
+    expect(result.details).toHaveLength(1);
+    expect(result.details[0]).toBe('Detail A: Pos. 2 enlarged, the same at the 2 places marked A in the isometric view');
+    // Both places are marked on the isometric view with the same letter
+    expect(result.letters).toEqual(['A', 'A']);
+});
+
 test('workshop sheet draws holes into cut outlines and lists bought parts without a bar', async ({ page }) => {
     await gotoApp(page);
 
