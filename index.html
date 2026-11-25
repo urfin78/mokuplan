@@ -4633,6 +4633,8 @@ window.addEventListener('load', function() {
                 if ((c.code + ' ' + c.name).toLowerCase() === v || c.code.toLowerCase() === v || c.code.slice(4) === v) hit = c;
             });
             if (!hit) return false;
+            // Enter fires both keydown and change: clear first so the second one finds nothing
+            ral.value = '';
             addDraftColor({ name: hit.name, code: hit.code, hex: hit.hex });
             return true;
         }
