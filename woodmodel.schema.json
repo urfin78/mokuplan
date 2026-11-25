@@ -115,6 +115,13 @@
             "type": ["string", "null"]
           },
 
+          "colors": {
+            "description": "Surface colors per side, in the piece's own coordinates: top/bottom (+Y/-Y, height), front/back (+Z/-Z, depth), start/end (-X/+X, width or length), mantle (curved face of a dowel or tapered leg), inner (faces into an opening, as in an L-bracket or frame), cut (walls left by Cut Joint). Values are ids from the top-level finishes array; sides without an entry are raw wood. Omitted when the piece is raw wood all over.",
+            "type": "object",
+            "propertyNames": { "enum": ["top", "bottom", "front", "back", "start", "end", "mantle", "inner", "cut"] },
+            "additionalProperties": { "type": "string", "minLength": 1 }
+          },
+
           "px": { "description": "World-space X position in mm.", "type": "number" },
           "py": { "description": "World-space Y position in mm.", "type": "number" },
           "pz": { "description": "World-space Z position in mm.", "type": "number" },
@@ -354,6 +361,26 @@
         "repackSplit": {
           "description": "Pack parts split in the model (Split Piece) onto stock like all other parts, instead of keeping them on the piece they were split from. Omitted when false.",
           "type": "boolean"
+        }
+      }
+    },
+
+    "finishes": {
+      "description": "Optional colors and finishes the pieces use, set under File → Colors. Only colors some piece uses are saved. Not part of the undo history. The browser-wide color catalog (browser storage) uses the same entry shape without id.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "hex"],
+        "properties": {
+          "id": { "description": "Id the pieces' colors refer to.", "type": "string", "minLength": 1 },
+          "name": { "description": "Display name, e.g. 'Pure white' or 'Linseed oil'.", "type": "string" },
+          "hex": { "description": "Color as '#rrggbb'. A glaze or oil is rendered mixed with the wood color.", "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+          "code": { "description": "Optional color code, e.g. 'RAL 9010' or a manufacturer's number.", "type": "string" },
+          "kind": { "description": "'opaque' for a covering paint, 'glaze' for a glaze or oil that lets the wood show through.", "type": "string", "enum": ["opaque", "glaze"] },
+          "coverage": { "description": "Coverage in m² per liter and coat.", "type": "number", "exclusiveMinimum": 0 },
+          "coats": { "description": "Number of coats. Defaults to 1.", "type": "integer", "minimum": 1 },
+          "packSize": { "description": "Size of one can in liters.", "type": "number", "exclusiveMinimum": 0 },
+          "packPrice": { "description": "Price of one can, in the currency chosen in the settings.", "type": "number", "minimum": 0 }
         }
       }
     }

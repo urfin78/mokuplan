@@ -8,6 +8,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 6.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 200, "h": 12, "d": 200
     },
@@ -16,6 +17,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 27.0000, "pz": 93.2500, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 200, "h": 30, "d": 13.5
     },
@@ -24,6 +26,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 27.0000, "pz": -93.2500, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 200, "h": 30, "d": 13.5
     },
@@ -32,6 +35,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": -93.2500, "py": 27.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 13.5, "h": 30, "d": 173
     },
@@ -40,6 +44,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 93.2500, "py": 27.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 13.5, "h": 30, "d": 173
     },
@@ -48,6 +53,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 22.0000, "pz": 74.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 173, "h": 20, "d": 25
     },
@@ -56,6 +62,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 22.0000, "pz": -74.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 173, "h": 20, "d": 25
     },
@@ -64,6 +71,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": -74.0000, "py": 22.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 25, "h": 20, "d": 123
     },
@@ -72,6 +80,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 74.0000, "py": 22.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 25, "h": 20, "d": 123
     },
@@ -80,6 +89,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": -57.5000, "py": 131.5000, "pz": -72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 199, "d": 28
     },
@@ -88,6 +98,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": -57.5000, "py": 131.5000, "pz": 72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 199, "d": 28
     },
@@ -96,6 +107,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 57.5000, "py": 131.5000, "pz": -72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 199, "d": 28
     },
@@ -104,6 +116,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 57.5000, "py": 131.5000, "pz": 72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 28, "h": 199, "d": 28
     },
@@ -112,6 +125,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": -57.5000, "py": 221.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 25, "h": 20, "d": 117
     },
@@ -120,6 +134,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": 57.5000, "py": 221.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 25, "h": 20, "d": 117
     },
@@ -128,6 +143,7 @@
       "notches": 17, "csgModified": true, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive", "cut": "olive" },
       "px": 0.0000, "py": 229.9516, "pz": -91.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 285, "h": 96, "d": 10,
       "csgOps": [
@@ -155,6 +171,7 @@
       "notches": 17, "csgModified": true, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive", "cut": "olive" },
       "px": 0.0000, "py": 229.9516, "pz": 91.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 285, "h": 96, "d": 10,
       "csgOps": [
@@ -182,6 +199,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": -22.4365, "py": 266.7674, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.663225,
       "w": 32, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 128.00
@@ -191,6 +209,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": -51.7869, "py": 247.3068, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.523599,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -200,6 +219,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": -87.0241, "py": 230.1205, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.383972,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -209,6 +229,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": -124.3102, "py": 218.0055, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.244346,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 90.00, "angleEnd": 86.00
@@ -218,6 +239,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": 22.4365, "py": 266.7674, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.663225,
       "w": 32, "h": 10, "d": 265,
       "angleStart": 128.00, "angleEnd": 86.00
@@ -227,6 +249,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": 51.7869, "py": 247.3068, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.523599,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -236,6 +259,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": 87.0241, "py": 230.1205, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.383972,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
@@ -245,6 +269,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
       "px": 124.3102, "py": 218.0055, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.244346,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 90.00
@@ -254,6 +279,7 @@
       "notches": 12, "csgModified": true, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive", "cut": "olive" },
       "px": 0.0000, "py": 296.1779, "pz": 0.0000, "rx": 0.000000, "ry": -1.570796, "rz": 0.000000,
       "w": 306, "h": 47, "d": 13.5,
       "csgOps": [
@@ -277,6 +303,10 @@
   ],
   "rulers": [
     { "p1": [-100, 0, 100], "p2": [100, 0, 100] }
+  ],
+  "finishes": [
+    { "id": "red", "name": "Blutorange", "hex": "#c63927", "code": "RAL 2002", "kind": "opaque", "coverage": 10, "coats": 2, "packSize": 0.375, "packPrice": 11.95 },
+    { "id": "olive", "name": "Braunoliv", "hex": "#3e3c32", "code": "RAL 6022", "kind": "opaque", "coverage": 10, "coats": 2, "packSize": 0.375, "packPrice": 11.95 }
   ],
   "stock": [
     { "profile": "10x40", "name": "Leiste", "length": 2000, "kerf": 3, "parts": ["10x39.8"] },
