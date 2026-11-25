@@ -44,7 +44,7 @@ File → Colors holds the paints, glazes and oils of the project. Start from a R
 
 ### Start from a template
 
-The `+ Add` menu has metric stock parts such as battens, planks and dowel pins, and you can save your own. Assembly templates build a whole construction from a few parameters, like this Japanese lantern.
+The `+ Add` menu has metric stock parts such as battens, planks and dowel pins, and you can save your own. Assembly templates build a whole construction from a few parameters, like this Japanese lantern. Its parts hold together without glue: the floor sits with its corners in housings in the posts, the side panels run in grooves along the posts, and a tenon on every post head sits in a blind hole in the roof.
 
 ![Japanese lantern created from an assembly template](docs/screenshots/assembly-template.png)
 
@@ -95,7 +95,7 @@ To explore a finished model, download [`examples/stool.woodmodel.json`](examples
 
 - Built-in metric woodworking parts
 - Custom templates stored in your browser, with JSON export and import
-- Assembly templates that create a pre-grouped construction from a few parameters
+- Assembly templates that create a pre-grouped construction from a few parameters, with the joints already cut
 
 </details>
 

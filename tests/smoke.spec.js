@@ -1106,3 +1106,94 @@ test('paint mode paints the clicked side, Shift+click the whole part', async ({ 
     await page.keyboard.press('Escape');
     await expect(page.locator('#paint-palette')).not.toHaveClass(/\bopen\b/);
 });
+
+test('Japanese lantern is joined without glue: joints fit, nothing overlaps, cuts survive save/reload', async ({ page }) => {
+    await gotoApp(page);
+    const result = await page.evaluate(() => {
+        const app = window.__app;
+        const THREE = app.THREE;
+        // Signed volume of a closed mesh (divergence theorem)
+        function volume(geo) {
+            const p = geo.attributes.position;
+            const idx = geo.index;
+            const n = idx ? idx.count : p.count;
+            const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+            let v = 0;
+            for (let i = 0; i < n; i += 3) {
+                a.fromBufferAttribute(p, idx ? idx.getX(i) : i);
+                b.fromBufferAttribute(p, idx ? idx.getX(i + 1) : i + 1);
+                c.fromBufferAttribute(p, idx ? idx.getX(i + 2) : i + 2);
+                v += a.dot(b.cross(c)) / 6;
+            }
+            return v;
+        }
+        // Volume two meshes share
+        function overlap(m1, m2) {
+            return volume(m1.geometry) - volume(app.csgSubtract(m1, m2));
+        }
+        // The post as a plain blank at the same place
+        function blankOf(post) {
+            const ud = post.userData;
+            const blank = new THREE.Mesh(new THREE.BoxGeometry(ud.w, ud.h, ud.d));
+            post.updateMatrixWorld(true);
+            post.matrixWorld.decompose(blank.position, blank.quaternion, blank.scale);
+            return blank;
+        }
+
+        const asm = app.builtInAssemblies.find((a) => a.key === 'lantern');
+        app.addAssembly(asm, {});
+        app.scene.updateMatrixWorld(true);
+        const W = 240, H = 360, S = 30;
+        const groove = S * 0.2, panelD = S * 0.3, floorT = S / 2, tenon = S / 2, tenonH = S / 3;
+        const byLabel = {};
+        app.getPieces().forEach((m) => { byLabel[m.userData.label] = m; });
+        const posts = [1, 2, 3, 4].map((i) => byLabel['Post ' + i]);
+        const others = app.getPieces().filter((m) => posts.indexOf(m) === -1);
+        const sides = others.filter((m) => m.userData.type === 'Frame');
+
+        let maxOverlap = 0;
+        posts.forEach((p) => others.forEach((o) => { maxOverlap = Math.max(maxOverlap, Math.abs(overlap(p, o))); }));
+        const blank = blankOf(posts[0]);
+        const sideFill = sides.map((s) => overlap(s, blank)).filter((v) => v > 1e-3);
+        const tenonBox = new THREE.Mesh(new THREE.BoxGeometry(2 * S, tenonH, 2 * S));
+        posts[0].getWorldPosition(tenonBox.position);
+        tenonBox.position.y = H - tenonH / 2;
+        // Material taken off the post where the floor corner sits, and how much of it the floor fills
+        const floorFill = overlap(byLabel.Floor, blank) - (S / 2) * (S / 2) * floorT;
+        // What stands above the shoulder is exactly the tenon
+        const tenonFill = overlap(posts[0], tenonBox) - tenon * tenon * tenonH;
+
+        const before = {};
+        app.getPieces().forEach((m) => { before[m.userData.label] = volume(m.geometry); });
+        app.restoreScene(app.serializeScene());
+        let reloadDiff = 0;
+        app.getPieces().forEach((m) => { reloadDiff = Math.max(reloadDiff, Math.abs(volume(m.geometry) - before[m.userData.label])); });
+
+        return {
+            notches: posts.map((p) => p.userData.notches).concat([byLabel.Roof.userData.notches, byLabel.Floor.userData.notches]),
+            allLocal: posts.concat([byLabel.Roof]).every((m) => m.userData.csgOps.every((op) => op.tool.local === true)),
+            postCutsShared: posts.every((p) => JSON.stringify(p.userData.csgOps) === JSON.stringify(posts[0].userData.csgOps)),
+            maxOverlap,
+            floorFill,
+            sideFill: sideFill.map((v) => v - groove * panelD * (H - 2 * S)),
+            tenonFill,
+            reloadCount: app.getPieces().length,
+            reloadNotches: app.getPieces().reduce((sum, m) => sum + m.userData.notches, 0),
+            reloadDiff
+        };
+    });
+
+    // 1 floor housing + 2 grooves + 4 shoulder cuts per post; 4 blind holes in the roof
+    expect(result.notches).toEqual([7, 7, 7, 7, 4, 0]);
+    expect(result.allLocal).toBe(true);
+    expect(result.postCutsShared).toBe(true);
+    expect(result.maxOverlap).toBeLessThan(0.1);
+    expect(Math.abs(result.floorFill)).toBeLessThan(0.1);
+    // Exactly the two panels next to the post reach into its grooves
+    expect(result.sideFill.length).toBe(2);
+    result.sideFill.forEach((v) => expect(Math.abs(v)).toBeLessThan(0.1));
+    expect(Math.abs(result.tenonFill)).toBeLessThan(0.1);
+    expect(result.reloadCount).toBe(10);
+    expect(result.reloadNotches).toBe(4 * 7 + 4);
+    expect(result.reloadDiff).toBeLessThan(0.01);
+});
