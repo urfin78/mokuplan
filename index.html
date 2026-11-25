@@ -1230,6 +1230,7 @@ window.addEventListener('load', function() {
             'sheet.finishes.all': 'all sides',
             'sheet.finishes.packs': '{count} × {size} l',
             'sheet.finishes.total': 'Total',
+            'sheet.view.section': 'Top view cut at {height} mm height: everything above taken away, cut faces dark (mm)',
             'stock.cancel': 'Cancel',
             'stock.apply': 'Apply',
             'stock.kind.round': 'Dowel rod',
@@ -1621,6 +1622,7 @@ window.addEventListener('load', function() {
             'sheet.finishes.all': 'alle Seiten',
             'sheet.finishes.packs': '{count} × {size} l',
             'sheet.finishes.total': 'Gesamt',
+            'sheet.view.section': 'Draufsicht, geschnitten in {height} mm Höhe: alles darüber abgenommen, Schnittflächen dunkel (mm)',
             'stock.cancel': 'Abbrechen',
             'stock.apply': 'Übernehmen',
             'stock.kind.round': 'Rundstab',
@@ -3917,8 +3919,18 @@ window.addEventListener('load', function() {
 
     function rebuildGeometry(mesh) {
         if (mesh.userData.csgModified) return;
-        var ud = mesh.userData;
         var oldGeo = mesh.geometry;
+        var newGeo = buildBaseGeometry(mesh.userData);
+        if (newGeo) {
+            mesh.geometry = newGeo;
+            oldGeo.dispose();
+            applyPieceColors(mesh);
+            if (labelsVisible) updateLabelPosition(mesh);
+        }
+    }
+
+    // Geometry of a part without its cuts, from its type and dimensions
+    function buildBaseGeometry(ud) {
         var newGeo;
         if (ud.type === 'Board') {
             newGeo = boardGeometry(ud.w, ud.h, ud.d, ud.angleStart, ud.angleEnd);
@@ -3957,12 +3969,7 @@ window.addEventListener('load', function() {
         } else if (ud.type === 'Frame') {
             newGeo = frameGeometry(ud.wOuter, ud.hOuter, ud.dOuter, ud.frameThickness, ud.barThickness, ud.gridX, ud.gridY);
         }
-        if (newGeo) {
-            mesh.geometry = newGeo;
-            oldGeo.dispose();
-            applyPieceColors(mesh);
-            if (labelsVisible) updateLabelPosition(mesh);
-        }
+        return newGeo || null;
     }
 
     // ============================================================
@@ -6648,6 +6655,8 @@ window.addEventListener('load', function() {
     // Faces meeting at less than this do not get an outline, so cylinder facets show no lines
     var SHEET_OUTLINE_ANGLE = 30;
     var SHEET_HIGHLIGHT_COLOR = 0xc8452f;
+    // Cut faces in a section view
+    var SHEET_SECTION_CUT_COLOR = 0x5b4a3a;
     var SHEET_GHOST_OPACITY = 0.18;
     // Directions checked for visibility. The first is the isometric overview on page 1.
     var SHEET_PROBE_DIRS = [
@@ -6659,6 +6668,17 @@ window.addEventListener('load', function() {
     // Pieces within this many mm of a detail cluster count as its neighbours when telling
     // repeated details apart
     var SHEET_DETAIL_TOUCH = 2;
+    // Section views (planSections()): at most this many, a part counts as shown when this share of
+    // the area it covers from above is visible, and a cut runs at or this many mm above a part's top
+    var SHEET_SECTION_MAX = 3;
+    var SHEET_SECTION_SHOWN = 0.5;
+    // ... and once a chosen section shows this share of a part, it needs no further section
+    var SHEET_SECTION_PARTIAL = 0.2;
+    var SHEET_SECTION_GAP = 1;
+    // A part whose bottom lies this close to a cut counts as resting on it and is taken away whole
+    var SHEET_SECTION_TOLERANCE = 0.05;
+    var SHEET_SECTION_W = 1000;
+    var SHEET_SECTION_H = 1000;
     // hAxis/vAxis: world axis spanned horizontally/vertically in the image, used for the dimension values
     var SHEET_VIEWS = [
         { key: 'sheet.view.front', dir: [0, 0, 1], up: [0, 1, 0], hAxis: 'x', vAxis: 'y' },
@@ -6735,6 +6755,21 @@ window.addEventListener('load', function() {
         return csgOutlineCache.get(m.geometry).clone();
     }
 
+    // Plane keeping what lies below height y
+    function sectionPlane(y) {
+        return new THREE.Plane(new THREE.Vector3(0, -1, 0), y);
+    }
+
+    // Hide the pieces lying wholly above a cut at height y, or resting on it; collects what it hid
+    function hideAboveCut(y, hidden) {
+        pieces.forEach(function(m) {
+            if (m.visible && new THREE.Box3().setFromObject(m).min.y >= y - SHEET_SECTION_TOLERANCE) {
+                m.visible = false;
+                hidden.push(m);
+            }
+        });
+    }
+
     // Hide everything directly under `scene` except lights, pieces and groups; collects what it hid
     function hideNonPieces(hidden) {
         scene.children.forEach(function(c) {
@@ -6753,6 +6788,9 @@ window.addEventListener('load', function() {
     // opts.clean: white background, pieces only (no grid, labels, rulers, highlights) with outlines.
     // opts.only: with clean, render just this piece and hide all others.
     // opts.highlight: with clean, show these pieces solid in the highlight color, all others as ghosts.
+    // opts.neighbours: with highlight, ghosts drawn with dark outlines, so the parts around stay readable.
+    // opts.clipY: with clean, a section: everything above this height is taken away and cut pieces
+    // show a dark cut face.
     function renderViewToDataURL(cam, w, h, opts) {
         opts = opts || {};
         var oldSize = renderer.getSize(new THREE.Vector2());
@@ -6766,6 +6804,9 @@ window.addEventListener('load', function() {
         var outlineMat = null;
         var ghostOutlineMat = null;
         var shadowless = [];
+        var oldPlanes = renderer.clippingPlanes;
+        var caps = [];
+        var capMat = null;
         try {
             if (resized) {
                 renderer.setPixelRatio(1);
@@ -6782,6 +6823,23 @@ window.addEventListener('load', function() {
                         hidden.push(m);
                     }
                 });
+                if (opts.clipY !== undefined) {
+                    hideAboveCut(opts.clipY, hidden);
+                    renderer.clippingPlanes = [sectionPlane(opts.clipY)];
+                    // The inside faces of a cut piece, seen through the cut, fill it like a section
+                    capMat = new THREE.MeshBasicMaterial({ color: SHEET_SECTION_CUT_COLOR, side: THREE.BackSide });
+                    pieces.forEach(function(m) {
+                        if (!m.visible || new THREE.Box3().setFromObject(m).max.y <= opts.clipY + SHEET_SECTION_TOLERANCE) return;
+                        var cap = new THREE.Mesh(m.geometry, capMat);
+                        m.add(cap);
+                        caps.push(cap);
+                        // What was taken away must not cast a shadow
+                        if (m.castShadow) {
+                            m.castShadow = false;
+                            shadowless.push(m);
+                        }
+                    });
+                }
                 (opts.only ? [opts.only] : pieces).forEach(function(m) {
                     var mat = m.material;
                     matState.push({
@@ -6799,7 +6857,8 @@ window.addEventListener('load', function() {
                         m.castShadow = false;
                         shadowless.push(m);
                     }
-                    var outline = new THREE.LineSegments(pieceOutlineGeometry(m), ghost ? ghostOutlineMat : outlineMat);
+                    var dark = !ghost || (opts.neighbours && opts.neighbours.indexOf(m) !== -1);
+                    var outline = new THREE.LineSegments(pieceOutlineGeometry(m), dark ? outlineMat : ghostOutlineMat);
                     m.add(outline);
                     outlines.push(outline);
                 });
@@ -6811,6 +6870,9 @@ window.addEventListener('load', function() {
                 o.parent.remove(o);
                 o.geometry.dispose();
             });
+            caps.forEach(function(c) { c.parent.remove(c); });
+            if (capMat) capMat.dispose();
+            renderer.clippingPlanes = oldPlanes;
             if (outlineMat) outlineMat.dispose();
             if (ghostOutlineMat) ghostOutlineMat.dispose();
             shadowless.forEach(function(m) { m.castShadow = true; });
@@ -6893,18 +6955,24 @@ window.addEventListener('load', function() {
     // Render each piece in a unique flat color and read back which pixels it actually got.
     // Returns per piece { count, x, y }: visible pixels and the visible pixel closest to their
     // centroid, which is where a position number can sit on the part itself.
-    function measureVisibility(cam, w, h) {
+    // clipY: measure a section, with everything above this height taken away. A piece cut open
+    // shows its inside faces in its own color, as if it were solid.
+    function measureVisibility(cam, w, h, clipY) {
         var rt = new THREE.WebGLRenderTarget(w, h, { minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter });
         var buf = new Uint8Array(w * h * 4);
         var oldClear = renderer.getClearColor(new THREE.Color());
         var oldAlpha = renderer.getClearAlpha();
+        var oldPlanes = renderer.clippingPlanes;
         var hidden = [];
         var materials = pieces.map(function(m) { return m.material; });
+        var cut = clipY !== undefined;
         try {
             hideNonPieces(hidden);
+            if (cut) hideAboveCut(clipY, hidden);
             pieces.forEach(function(m, i) {
-                m.material = new THREE.MeshBasicMaterial({ color: i + 1 });
+                m.material = new THREE.MeshBasicMaterial({ color: i + 1, side: cut ? THREE.DoubleSide : THREE.FrontSide });
             });
+            if (cut) renderer.clippingPlanes = [sectionPlane(clipY)];
             renderer.setClearColor(0x000000, 1);
             renderer.setRenderTarget(rt);
             renderer.render(scene, cam);
@@ -6912,6 +6980,7 @@ window.addEventListener('load', function() {
         } finally {
             renderer.setRenderTarget(null);
             renderer.setClearColor(oldClear, oldAlpha);
+            renderer.clippingPlanes = oldPlanes;
             pieces.forEach(function(m, i) {
                 m.material.dispose();
                 m.material = materials[i];
@@ -7031,6 +7100,194 @@ window.addEventListener('load', function() {
             if (!isCovered) enclosed.push(i);
         });
         return { overviews: overviews, enclosed: enclosed };
+    }
+
+    // Area in mm² a piece covers seen from above: half the summed |y| of its triangles' area
+    // vectors in world space, exact for a closed convex mesh
+    function pieceShadowY(m) {
+        m.updateMatrixWorld(true);
+        var pos = m.geometry.attributes.position;
+        var index = m.geometry.index;
+        var count = index ? index.count : pos.count;
+        var a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+        var sum = 0;
+        for (var k = 0; k + 2 < count; k += 3) {
+            a.fromBufferAttribute(pos, index ? index.getX(k) : k).applyMatrix4(m.matrixWorld);
+            b.fromBufferAttribute(pos, index ? index.getX(k + 1) : k + 1).applyMatrix4(m.matrixWorld);
+            c.fromBufferAttribute(pos, index ? index.getX(k + 2) : k + 2).applyMatrix4(m.matrixWorld);
+            c.sub(a);
+            sum += Math.abs(b.sub(a).cross(c).y);
+        }
+        return sum / 4;
+    }
+
+    // Box of what stays of the model below a cut at height y
+    function sectionBox(y) {
+        var box = new THREE.Box3();
+        pieces.forEach(function(m) {
+            var b = new THREE.Box3().setFromObject(m);
+            if (b.min.y < y) box.union(b);
+        });
+        if (!box.isEmpty()) box.max.y = Math.min(box.max.y, y);
+        return box;
+    }
+
+    function sectionCamera(box, w, h, margin) {
+        return makeSheetCamera(box, new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, -1), w, h, margin);
+    }
+
+    // Top views with the parts above a height taken away, for parts the plain top view hides,
+    // like a trough under a roof. A cut runs at or just above the top of a hidden part; of all
+    // such heights the ones showing most of the still hidden parts are taken, at most
+    // SHEET_SECTION_MAX. Parts that need an X-ray detail anyway (`enclosed`) are not looked for.
+    // Returns [{ y, box, items: [{ index, x, y }] }] from low to high; items are the parts the
+    // view shows well, with a spot for their number in a SHEET_SECTION_W x SHEET_SECTION_H image.
+    function planSections(enclosed) {
+        var w = SHEET_SECTION_W / 2, h = SHEET_SECTION_H / 2;
+        var shadow = pieces.map(pieceShadowY);
+        function look(y) {
+            var box = y === undefined ? new THREE.Box3() : sectionBox(y);
+            if (y === undefined) pieces.forEach(function(m) { box.expandByObject(m); });
+            if (box.isEmpty()) return null;
+            var cam = sectionCamera(box, w, h, SHEET_VIEW_MARGIN / 2);
+            var stats = measureVisibility(cam, w, h, y);
+            var pxPerMm = w / (cam.right - cam.left);
+            var share = stats.map(function(st, i) {
+                return st.count >= SHEET_MIN_VISIBLE_PX && shadow[i] > 0 ? st.count / (pxPerMm * pxPerMm) / shadow[i] : 0;
+            });
+            var shows = share.map(function(v) { return v >= SHEET_SECTION_SHOWN; });
+            return { y: y, box: box, stats: stats, shows: shows, share: share };
+        }
+        var top = look();
+        if (!top) return [];
+        var hidden = [];
+        pieces.forEach(function(m, i) {
+            if (!top.shows[i] && shadow[i] > 0 && enclosed.indexOf(i) === -1) hidden.push(i);
+        });
+        if (hidden.length === 0) return [];
+        // Right on top of a hidden part, which takes away what rests on it, like a seat on its
+        // legs; and a little above, which shows what runs through it cut open, like posts
+        var heights = [];
+        hidden.forEach(function(i) {
+            var top = new THREE.Box3().setFromObject(pieces[i]).max.y;
+            [top, top + SHEET_SECTION_GAP].forEach(function(y) {
+                y = Math.round(y * 10) / 10;
+                if (heights.indexOf(y) === -1) heights.push(y);
+            });
+        });
+        var looks = heights.map(look).filter(Boolean);
+        var chosen = [];
+        while (hidden.length > 0 && chosen.length < SHEET_SECTION_MAX) {
+            var best = null, bestCount = 0;
+            looks.forEach(function(l) {
+                if (chosen.indexOf(l) !== -1) return;
+                var n = hidden.filter(function(i) { return l.shows[i]; }).length;
+                // Ties go to the lower cut, which leaves less in the way
+                if (n > bestCount || (n === bestCount && n > 0 && l.y < best.y)) {
+                    best = l;
+                    bestCount = n;
+                }
+            });
+            if (!best) break;
+            chosen.push(best);
+            // A part this view shows in good part, like a base plate between strips, needs no view of its own
+            hidden = hidden.filter(function(i) { return best.share[i] < SHEET_SECTION_PARTIAL; });
+        }
+        return chosen.sort(function(a, b) { return a.y - b.y; }).map(function(l) {
+            var items = [];
+            l.shows.forEach(function(shows, i) {
+                if (shows) items.push({ index: i, x: l.stats[i].x * 2, y: l.stats[i].y * 2 });
+            });
+            return { y: l.y, box: l.box, items: items };
+        });
+    }
+
+    // Whether a piece lies along the world axes, so its box is its real outline
+    function pieceAxisAligned(m) {
+        var e = new THREE.Matrix4().extractRotation(m.matrixWorld).elements;
+        return [0, 1, 2, 4, 5, 6, 8, 9, 10].every(function(k) {
+            var v = Math.abs(e[k]);
+            return v < 1e-6 || Math.abs(v - 1) < 1e-6;
+        });
+    }
+
+    // Chain of dimensions along one side of a view: from edge to edge of the parts, each step
+    // with its length. positions: mm along the axis, px: the same in image pixels. Of steps too
+    // short for their text, every other one has its value on the inner side of the line.
+    function drawChainDimension(svg, positions, px, edge, horizontal) {
+        var g = svgEl('g', { stroke: '#000', 'stroke-width': 1.5, fill: 'none' }, svg);
+        var off = edge + 35;
+        var tick = 7;
+        var first = px[0], last = px[px.length - 1];
+        if (horizontal) svgEl('line', { x1: first, y1: off, x2: last, y2: off }, g);
+        else svgEl('line', { x1: off, y1: first, x2: off, y2: last }, g);
+        px.forEach(function(p) {
+            if (horizontal) {
+                svgEl('line', { x1: p, y1: edge + 6, x2: p, y2: off + 8 }, g);
+                svgEl('line', { x1: p - tick, y1: off + tick, x2: p + tick, y2: off - tick }, g);
+            } else {
+                svgEl('line', { x1: edge + 6, y1: p, x2: off + 8, y2: p }, g);
+                svgEl('line', { x1: off - tick, y1: p + tick, x2: off + tick, y2: p - tick }, g);
+            }
+        });
+        var stagger = false;
+        for (var i = 1; i < positions.length; i++) {
+            var label = formatMm(positions[i] - positions[i - 1]);
+            var mid = (px[i] + px[i - 1]) / 2;
+            var room = Math.abs(px[i] - px[i - 1]);
+            var tight = room < label.length * 14 + 10;
+            stagger = tight ? !stagger : false;
+            // Every other short step has its value on the model side of the line, inside the image
+            var at = horizontal ? (stagger ? off - 8 : off + 28) : (stagger ? off - 10 : off + 24);
+            if (horizontal) svgText(svg, mid, at, 22, label);
+            else svgText(svg, at, mid, 22, label, 'rotate(-90 ' + at + ' ' + mid + ')');
+        }
+    }
+
+    // Edges of the axis-aligned parts a section shows, along one world axis, merged within 0.5 mm
+    function sectionEdges(items, axis) {
+        var list = [];
+        items.forEach(function(item) {
+            var m = pieces[item.index];
+            // Round parts are found by their number; their faces would only crowd the chain
+            if (!pieceAxisAligned(m) || SHEET_CUT_ROUND_TOOLS.indexOf(m.userData.type) !== -1) return;
+            var b = new THREE.Box3().setFromObject(m);
+            list.push(b.min[axis], b.max[axis]);
+        });
+        list.sort(function(a, b) { return a - b; });
+        var out = [];
+        list.forEach(function(v) {
+            if (out.length === 0 || v - out[out.length - 1] > 0.5) out.push(Math.round(v * 10) / 10);
+        });
+        return out;
+    }
+
+    // Section view: numbered parts and chains of dimensions along the bottom (x) and right (z)
+    function buildSectionFigure(parent, section, partNumbers) {
+        var w = SHEET_SECTION_W, h = SHEET_SECTION_H;
+        var cam = sectionCamera(section.box, w, h, SHEET_VIEW_MARGIN);
+        var svg = buildSheetFigure(parent, cam, w, h, { clean: true, clipY: section.y },
+            t('sheet.view.section', { height: formatMm(section.y) }), 'sheet-view sheet-section');
+        var corners = boxCorners(section.box).map(function(p) { return projectToSheetPx(cam, p, w, h); });
+        var maxX = Math.max.apply(null, corners.map(function(p) { return p.x; }));
+        var maxY = Math.max.apply(null, corners.map(function(p) { return p.y; }));
+        var center = section.box.getCenter(new THREE.Vector3());
+        var xs = sectionEdges(section.items, 'x');
+        if (xs.length > 1) {
+            drawChainDimension(svg, xs, xs.map(function(x) {
+                return projectToSheetPx(cam, new THREE.Vector3(x, center.y, center.z), w, h).x;
+            }), maxY, true);
+        }
+        var zs = sectionEdges(section.items, 'z');
+        if (zs.length > 1) {
+            drawChainDimension(svg, zs, zs.map(function(z) {
+                return projectToSheetPx(cam, new THREE.Vector3(center.x, center.y, z), w, h).y;
+            }), maxX, false);
+        }
+        drawScaleBar(svg, 30, 30, w / (cam.right - cam.left), 250);
+        drawSpreadMarkers(svg, section.items.map(function(item) {
+            return { x: item.x, y: item.y, number: partNumbers[item.index] };
+        }), w, h);
     }
 
     function boxGap(a, b) {
@@ -7269,15 +7526,36 @@ window.addEventListener('load', function() {
             pos: formatPartNumbers(cluster.members, partNumbers),
             count: clusters.length
         });
+        // The parts the cluster touches keep dark outlines and get their numbers too, at the middle
+        // of the bit of them inside the view, so you see what the hidden part sits in
+        var frame = frameOf(cluster);
+        var touch = cluster.box.clone().expandByScalar(SHEET_DETAIL_TOUCH);
+        var neighbours = [];
+        pieces.forEach(function(m, i) {
+            if (cluster.members.indexOf(i) === -1 && new THREE.Box3().setFromObject(m).intersectsBox(touch)) neighbours.push(i);
+        });
         var svg = buildSheetFigure(parent, cam, SHEET_VIEW_W, SHEET_DETAIL_H, {
             clean: true,
-            highlight: cluster.members.map(function(i) { return pieces[i]; })
+            highlight: cluster.members.map(function(i) { return pieces[i]; }),
+            neighbours: neighbours.map(function(i) { return pieces[i]; })
         }, caption, 'sheet-view sheet-detail');
-        drawSpreadMarkers(svg, cluster.members.map(function(i) {
+        var targets = cluster.members.map(function(i) {
             var center = new THREE.Box3().setFromObject(pieces[i]).getCenter(new THREE.Vector3());
             var c = projectToSheetPx(cam, center, SHEET_VIEW_W, SHEET_DETAIL_H);
             return { x: c.x, y: c.y, number: partNumbers[i] };
-        }), SHEET_VIEW_W, SHEET_DETAIL_H);
+        });
+        var numbered = {};
+        cluster.members.forEach(function(i) { numbered[partNumbers[i]] = true; });
+        neighbours.forEach(function(i) {
+            // One number per part number is enough to name the neighbour
+            if (numbered[partNumbers[i]]) return;
+            numbered[partNumbers[i]] = true;
+            var inside = new THREE.Box3().setFromObject(pieces[i]).intersect(frame);
+            if (inside.isEmpty()) return;
+            var c = projectToSheetPx(cam, inside.getCenter(new THREE.Vector3()), SHEET_VIEW_W, SHEET_DETAIL_H);
+            targets.push({ x: c.x, y: c.y, number: partNumbers[i] });
+        });
+        drawSpreadMarkers(svg, targets, SHEET_VIEW_W, SHEET_DETAIL_H);
         clusters.forEach(function(each) {
             var px = boxCorners(frameOf(each)).map(function(p) { return projectToSheetPx(iso.cam, p, SHEET_VIEW_W, SHEET_VIEW_H); });
             var xs = px.map(function(p) { return p.x; });
@@ -7317,15 +7595,117 @@ window.addEventListener('load', function() {
         return Math.min(aS, aE) + '/' + Math.max(aS, aE);
     }
 
-    // Colors of a part as part of its identity: sides in fixed order, known finishes only
-    function pieceColorKey(ud) {
+    // Colors of a part as part of its identity: sides in fixed order, known finishes only.
+    // turn: with a half turn of the part (see HALF_TURNS) its sides trade places.
+    function pieceColorKey(ud, turn) {
         var byFinish = pieceFinishes(ud);
+        var swap = (turn && HALF_TURN_SIDES[turn]) || {};
         return SIDE_KEYS.filter(function(k) { return byFinish[k]; })
-            .map(function(k) { return k + '=' + byFinish[k].id; }).join(',');
+            .map(function(k) { return (swap[k] || k) + '=' + byFinish[k].id; })
+            .sort().join(',');
     }
 
-    // Merge identical parts into one parts list row so the list stays short. Cuts are part of
-    // the identity; legacy cut pieces have no recorded csgOps, so they are never merged.
+    // A part turned by 180° about one of its own axes is still the same part when its blank looks
+    // the same afterwards: a left and a right post with the hole on their inner face, two layers of
+    // a ridge with half a groove each. null is the part as it lies.
+    var HALF_TURNS = [null, 'x', 'y', 'z'];
+    // Sides a half turn swaps
+    var HALF_TURN_SIDES = {
+        x: { top: 'bottom', bottom: 'top', front: 'back', back: 'front' },
+        y: { start: 'end', end: 'start', front: 'back', back: 'front' },
+        z: { top: 'bottom', bottom: 'top', start: 'end', end: 'start' }
+    };
+
+    function halfTurnMatrix(axis) {
+        var m = new THREE.Matrix4();
+        if (axis === 'x') m.makeRotationX(Math.PI);
+        else if (axis === 'y') m.makeRotationY(Math.PI);
+        else if (axis === 'z') m.makeRotationZ(Math.PI);
+        return m;
+    }
+
+    // Size, miter angles and the like of a part or a cut tool, as one string
+    function blankKey(spec) {
+        return [spec.type, pieceSizeText(spec), spec.angleStart === undefined ? 90 : spec.angleStart,
+            spec.angleEnd === undefined ? 90 : spec.angleEnd].join('|');
+    }
+
+    // Half turns that map the blank of a part or tool onto itself: every vertex of the turned
+    // blank lands on a vertex of the blank. Cached per blank.
+    var halfTurnCache = {};
+    function blankHalfTurns(spec) {
+        var key = blankKey(spec);
+        if (halfTurnCache[key]) return halfTurnCache[key];
+        var geo = buildBaseGeometry(spec);
+        var turns = [null];
+        if (geo) {
+            var pos = geo.attributes.position;
+            var v = new THREE.Vector3();
+            var round = function(p) { return [p.x, p.y, p.z].map(function(c) { return Math.round(c * 100) / 100 || 0; }).join(','); };
+            var set = {};
+            for (var i = 0; i < pos.count; i++) set[round(v.fromBufferAttribute(pos, i))] = true;
+            HALF_TURNS.slice(1).forEach(function(axis) {
+                var m = halfTurnMatrix(axis);
+                for (var i = 0; i < pos.count; i++) {
+                    if (!set[round(v.fromBufferAttribute(pos, i).applyMatrix4(m))]) return;
+                }
+                turns.push(axis);
+            });
+            geo.dispose();
+        }
+        halfTurnCache[key] = turns;
+        return turns;
+    }
+
+    // One cut as a string that does not depend on how its tool was placed: the tool's blank and
+    // its matrix in the part's frame, after the part's half turn `turn`. A tool that looks the same
+    // turned (a dowel, a box) can be described several ways; the smallest string stands for all.
+    function cutOpKey(op, turn) {
+        var tool = op.tool;
+        var m = new THREE.Matrix4().compose(
+            new THREE.Vector3(tool.px || 0, tool.py || 0, tool.pz || 0),
+            new THREE.Quaternion().setFromEuler(new THREE.Euler(tool.rx || 0, tool.ry || 0, tool.rz || 0, 'XYZ')),
+            new THREE.Vector3(1, 1, 1)
+        );
+        if (turn) m.premultiply(halfTurnMatrix(turn));
+        var best = null;
+        blankHalfTurns(tool).forEach(function(own) {
+            var e = (own ? m.clone().multiply(halfTurnMatrix(own)) : m).elements;
+            var str = e.map(function(c, i) {
+                // Rotation to 0.001, position (elements 12–14) to 0.1 mm
+                var r = i >= 12 && i <= 14 ? Math.round(c * 10) / 10 : Math.round(c * 1000) / 1000;
+                return String(r || 0);
+            }).join(',');
+            if (best === null || str < best) best = str;
+        });
+        return op.op + ':' + blankKey(tool) + ':' + best;
+    }
+
+    // Cuts and colors of a part as one key that stays the same when the part is turned onto
+    // itself, so identical parts built the other way round share a parts list row. Cuts are
+    // subtracted, so their order does not matter. Cuts saved in world coordinates (old files)
+    // cannot be turned and are compared as they are.
+    var pieceShapeKeyCache = {};
+    function pieceShapeKey(ud) {
+        var ops = Array.isArray(ud.csgOps) ? ud.csgOps : [];
+        var cacheKey = JSON.stringify([blankKey(ud), ops, ud.colors || null, pieceColorKey(ud)]);
+        if (pieceShapeKeyCache[cacheKey] !== undefined) return pieceShapeKeyCache[cacheKey];
+        var turnable = ops.every(function(op) { return op && op.tool && op.tool.local; });
+        var best = null;
+        (turnable ? blankHalfTurns(ud) : [null]).forEach(function(turn) {
+            var cuts = turnable
+                ? ops.map(function(op) { return cutOpKey(op, turn); }).sort().join('|')
+                : JSON.stringify(ops);
+            var key = cuts + '#' + pieceColorKey(ud, turn);
+            if (best === null || key < best) best = key;
+        });
+        pieceShapeKeyCache[cacheKey] = best;
+        return best;
+    }
+
+    // Merge identical parts into one parts list row so the list stays short. Cuts and colors are
+    // part of the identity, compared up to half turns of the part (pieceShapeKey()); legacy cut
+    // pieces have no recorded csgOps, so they are never merged.
     function groupIdenticalPieces() {
         var byKey = {};
         var rows = [];
@@ -7341,7 +7721,7 @@ window.addEventListener('load', function() {
                 ? [ud.w, ud.h, ud.d].sort(function(a, b) { return a - b; }).join('x')
                 : pieceSizeText(ud);
             var key = legacyCut ? 'legacy|' + i : [
-                ud.type, sizeKey, pieceMiterKey(ud, hasCuts), ud.notches || 0, JSON.stringify(ud.csgOps || []), colorKey
+                ud.type, sizeKey, pieceMiterKey(ud, hasCuts), ud.notches || 0, pieceShapeKey(ud)
             ].join('|');
             if (!byKey[key]) {
                 byKey[key] = { mesh: m, members: [], labels: [] };
@@ -9930,10 +10310,20 @@ window.addEventListener('load', function() {
 
         var maxDim = Math.max(size.x, size.y, size.z);
         var clusters = clusterPieces(analysis.enclosed, maxDim * 0.1);
-        if (analysis.overviews.length > 1 || clusters.length > 0) {
+        var sections = planSections(analysis.enclosed);
+        // A part a section shows well needs no extra view from another side
+        var inSection = {};
+        sections.forEach(function(section) {
+            section.items.forEach(function(item) { inSection[item.index] = true; });
+        });
+        analysis.overviews = [analysis.overviews[0]].concat(analysis.overviews.slice(1).map(function(overview) {
+            return { dir: overview.dir, items: overview.items.filter(function(item) { return !inSection[item.index]; }) };
+        }).filter(function(overview) { return overview.items.length > 0; }));
+        if (analysis.overviews.length > 1 || clusters.length > 0 || sections.length > 0) {
             var detailsPage = sheetEl('section', 'sheet-page sheet-details', printSheet);
             sheetEl('h2', null, detailsPage).textContent = t('sheet.details');
             var details = sheetEl('div', 'sheet-views', detailsPage);
+            sections.forEach(function(section) { buildSectionFigure(details, section, partNumbers); });
             analysis.overviews.slice(1).forEach(function(overview) {
                 var caption = t('sheet.view.other', {
                     pos: formatPartNumbers(overview.items.map(function(item) { return item.index; }), partNumbers)
