@@ -8,6 +8,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 6.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 200, "h": 12, "d": 200
     },
@@ -16,6 +17,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 27.0000, "pz": 93.2500, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 200, "h": 30, "d": 13.5
     },
@@ -24,6 +26,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 0.0000, "py": 27.0000, "pz": -93.2500, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 200, "h": 30, "d": 13.5
     },
@@ -32,6 +35,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": -93.2500, "py": 27.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 13.5, "h": 30, "d": 173
     },
@@ -40,6 +44,7 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
       "px": 93.2500, "py": 27.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 13.5, "h": 30, "d": 173
     },
@@ -48,91 +53,98 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": 0.0000, "py": 22.0000, "pz": 67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 107, "h": 20, "d": 25
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": 0.0000, "py": 22.0000, "pz": 74.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 173, "h": 20, "d": 25
     },
     {
       "type": "Board", "id": 7, "label": "Trograhmen hinten",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": 0.0000, "py": 22.0000, "pz": -67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 107, "h": 20, "d": 25
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": 0.0000, "py": 22.0000, "pz": -74.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 173, "h": 20, "d": 25
     },
     {
       "type": "Board", "id": 8, "label": "Trograhmen links",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": -67.5000, "py": 22.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 25, "h": 20, "d": 107
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": -74.0000, "py": 22.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 25, "h": 20, "d": 123
     },
     {
       "type": "Board", "id": 9, "label": "Trograhmen rechts",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": 67.5000, "py": 22.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 25, "h": 20, "d": 107
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": 74.0000, "py": 22.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 25, "h": 20, "d": 123
     },
     {
       "type": "Board", "id": 11, "label": "Pfosten hinten links",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
-      "px": -67.5000, "py": 119.5000, "pz": -67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 28, "h": 215, "d": 28
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": -57.5000, "py": 131.5000, "pz": -72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 28, "h": 199, "d": 28
     },
     {
       "type": "Board", "id": 12, "label": "Pfosten vorn links",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
-      "px": -67.5000, "py": 119.5000, "pz": 67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 28, "h": 215, "d": 28
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": -57.5000, "py": 131.5000, "pz": 72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 28, "h": 199, "d": 28
     },
     {
       "type": "Board", "id": 13, "label": "Pfosten hinten rechts",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
-      "px": 67.5000, "py": 119.5000, "pz": -67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 28, "h": 215, "d": 28
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": 57.5000, "py": 131.5000, "pz": -72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 28, "h": 199, "d": 28
     },
     {
       "type": "Board", "id": 14, "label": "Pfosten vorn rechts",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "oil", "bottom": "oil", "front": "oil", "back": "oil", "start": "oil", "end": "oil" },
-      "px": 67.5000, "py": 119.5000, "pz": 67.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 28, "h": 215, "d": 28
+      "colors": { "top": "red", "bottom": "red", "front": "red", "back": "red", "start": "red", "end": "red" },
+      "px": 57.5000, "py": 131.5000, "pz": 72.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 28, "h": 199, "d": 28
     },
     {
       "type": "Board", "id": 15, "label": "Traufbalken links",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": -67.5000, "py": 217.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 25, "h": 20, "d": 107
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": -57.5000, "py": 221.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 25, "h": 20, "d": 117
     },
     {
       "type": "Board", "id": 16, "label": "Traufbalken rechts",
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": 67.5000, "py": 217.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
-      "w": 25, "h": 20, "d": 107
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": 57.5000, "py": 221.0000, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "w": 25, "h": 20, "d": 117
     },
     {
       "type": "Board", "id": 17, "label": "Giebel hinten",
       "notches": 17, "csgModified": true, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": 0.0000, "py": 229.9919, "pz": -86.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive", "cut": "olive" },
+      "px": 0.0000, "py": 229.9516, "pz": -91.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 285, "h": 96, "d": 10,
       "csgOps": [
         { "op": "subtract", "tool": { "type": "Board", "local": true, "px": 52.9229, "py": 82.7932, "pz": 0, "rx": 0, "ry": 0, "rz": -0.663225, "w": 40.5659, "h": 120.0000, "d": 18 } },
@@ -159,7 +171,8 @@
       "notches": 17, "csgModified": true, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": 0.0000, "py": 229.9919, "pz": 86.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive", "cut": "olive" },
+      "px": 0.0000, "py": 229.9516, "pz": 91.5000, "rx": 0.000000, "ry": 0.000000, "rz": 0.000000,
       "w": 285, "h": 96, "d": 10,
       "csgOps": [
         { "op": "subtract", "tool": { "type": "Board", "local": true, "px": 52.9229, "py": 82.7932, "pz": 0, "rx": 0, "ry": 0, "rz": -0.663225, "w": 40.5659, "h": 120.0000, "d": 18 } },
@@ -186,8 +199,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": -22.4365, "py": 266.8077, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.663225,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": -22.4365, "py": 266.7674, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.663225,
       "w": 32, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 128.00
     },
@@ -196,8 +209,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": -51.7869, "py": 247.3471, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.523599,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": -51.7869, "py": 247.3068, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.523599,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
     },
@@ -206,8 +219,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": -87.0241, "py": 230.1608, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.383972,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": -87.0241, "py": 230.1205, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.383972,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
     },
@@ -216,8 +229,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": -124.3102, "py": 218.0458, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.244346,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": -124.3102, "py": 218.0055, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": 0.244346,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 90.00, "angleEnd": 86.00
     },
@@ -226,8 +239,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": 22.4365, "py": 266.8077, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.663225,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": 22.4365, "py": 266.7674, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.663225,
       "w": 32, "h": 10, "d": 265,
       "angleStart": 128.00, "angleEnd": 86.00
     },
@@ -236,8 +249,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": 51.7869, "py": 247.3471, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.523599,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": 51.7869, "py": 247.3068, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.523599,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
     },
@@ -246,8 +259,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": 87.0241, "py": 230.1608, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.383972,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": 87.0241, "py": 230.1205, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.383972,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 86.00
     },
@@ -256,8 +269,8 @@
       "notches": 0, "csgModified": false, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "colors": { "top": "roof", "bottom": "roof", "front": "roof", "back": "roof", "start": "roof", "end": "roof" },
-      "px": 124.3102, "py": 218.0458, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.244346,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive" },
+      "px": 124.3102, "py": 218.0055, "pz": 0.0000, "rx": 0.000000, "ry": 0.000000, "rz": -0.244346,
       "w": 40, "h": 10, "d": 265,
       "angleStart": 86.00, "angleEnd": 90.00
     },
@@ -266,7 +279,8 @@
       "notches": 12, "csgModified": true, "price": 0, "priceMode": "fixed",
       "sourceId": null, "sourcePrice": 0, "sourcePriceMode": null, "sourceLabel": null,
       "groupId": "grp_1",
-      "px": 0.0000, "py": 296.2182, "pz": 0.0000, "rx": 0.000000, "ry": -1.570796, "rz": 0.000000,
+      "colors": { "top": "olive", "bottom": "olive", "front": "olive", "back": "olive", "start": "olive", "end": "olive", "cut": "olive" },
+      "px": 0.0000, "py": 296.1779, "pz": 0.0000, "rx": 0.000000, "ry": -1.570796, "rz": 0.000000,
       "w": 306, "h": 47, "d": 13.5,
       "csgOps": [
         { "op": "subtract", "tool": { "type": "Board", "local": true, "px": 0.0000, "py": 50.0026, "pz": 0, "rx": 0, "ry": 0, "rz": 0.000000, "w": 59.2214, "h": 80.0000, "d": 23.5 } },
@@ -291,8 +305,8 @@
     { "p1": [-100, 0, 100], "p2": [100, 0, 100] }
   ],
   "finishes": [
-    { "id": "roof", "name": "Oxidrot", "hex": "#5e2028", "code": "RAL 3009", "kind": "opaque", "coverage": 10, "coats": 2, "packSize": 0.375, "packPrice": 11.95 },
-    { "id": "oil", "name": "Leinölfirnis", "hex": "#b5651d", "kind": "glaze", "coverage": 12, "coats": 2, "packSize": 0.5, "packPrice": 8.5 }
+    { "id": "red", "name": "Blutorange", "hex": "#c63927", "code": "RAL 2002", "kind": "opaque", "coverage": 10, "coats": 2, "packSize": 0.375, "packPrice": 11.95 },
+    { "id": "olive", "name": "Braunoliv", "hex": "#3e3c32", "code": "RAL 6022", "kind": "opaque", "coverage": 10, "coats": 2, "packSize": 0.375, "packPrice": 11.95 }
   ],
   "stock": [
     { "profile": "10x40", "name": "Leiste", "length": 2000, "kerf": 3, "parts": ["10x39.8"] },

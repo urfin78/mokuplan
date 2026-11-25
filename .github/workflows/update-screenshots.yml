@@ -13,6 +13,10 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
+# Least privilege by default; jobs that write declare it themselves
+permissions:
+  contents: read
+
 jobs:
   regen:
     runs-on: ubuntu-latest
@@ -20,12 +24,12 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.branch || github.ref_name }}
           fetch-depth: 0
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
 
@@ -57,7 +61,7 @@ jobs:
             tests/readme-screenshots.spec.js
 
       - name: Open PR with regenerated screenshots
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "docs: regenerate README screenshots"
           title: "docs: regenerate README screenshots"

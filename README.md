@@ -44,7 +44,7 @@ File → Colors holds the paints, glazes and oils of the project. Start from a R
 
 ### Start from a template
 
-The `+ Add` menu has metric stock parts such as battens, planks and dowel pins, and you can save your own. Assembly templates build a whole construction from a few parameters, like this Japanese lantern.
+The `+ Add` menu has metric stock parts such as battens, planks and dowel pins, and you can save your own. Assembly templates build a whole construction from a few parameters, like this Japanese lantern. Its parts hold together without glue: the floor sits with its corners in housings in the posts, the side panels run in grooves along the posts, and a tenon on every post head sits in a blind hole in the roof.
 
 ![Japanese lantern created from an assembly template](docs/screenshots/assembly-template.png)
 
@@ -95,7 +95,7 @@ To explore a finished model, download [`examples/stool.woodmodel.json`](examples
 
 - Built-in metric woodworking parts
 - Custom templates stored in your browser, with JSON export and import
-- Assembly templates that create a pre-grouped construction from a few parameters
+- Assembly templates that create a pre-grouped construction from a few parameters, with the joints already cut
 
 </details>
 
@@ -162,6 +162,8 @@ The README screenshots under `docs/screenshots/` are regenerated via the manual 
 Releases are cut by the manual **Auto Release** workflow (`workflow_dispatch`). It derives the version bump from commit subject lines since the last tag (`feat:` for minor, `type!:` or `BREAKING CHANGE` in the subject for major, anything else for patch), creates a GitHub Release, and deploys `index.html` to the `gh-pages` branch.
 
 The CI tooling lives under [`.github/package.json`](.github/package.json) — kept inside `.github/` so it stays out of the application code. The app itself has no build dependencies.
+
+All workflows run with a read-only `GITHUB_TOKEN` by default; only the jobs that push or open PRs ask for write access. Dependabot ([`.github/dependabot.yml`](.github/dependabot.yml)) opens weekly grouped PRs for the GitHub Actions and the CI tooling. Three.js is loaded through the CDN import map, which Dependabot does not see, so it is bumped by hand.
 
 ## License
 

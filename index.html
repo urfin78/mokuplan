@@ -4640,6 +4640,8 @@ window.addEventListener('load', function() {
                 if ((c.code + ' ' + c.name).toLowerCase() === v || c.code.toLowerCase() === v || c.code.slice(4) === v) hit = c;
             });
             if (!hit) return false;
+            // Enter fires both keydown and change: clear first so the second one finds nothing
+            ral.value = '';
             addDraftColor({ name: hit.name, code: hit.code, hex: hit.hex });
             return true;
         }
@@ -5112,7 +5114,9 @@ window.addEventListener('load', function() {
     // Assembly templates: parameterised compositions that spawn N pieces and group them.
     // Each entry: { key, nameKey, params: [{name, labelKey, default, min?, max?, step?}], build: (p) => [pieceSpec] }.
     // A pieceSpec is the piece factory args plus position/rotation/label, e.g.
-    //   { type: 'Board', w, h, d, px, py, pz, rx?, ry?, rz?, label? }.
+    //   { type: 'Board', w, h, d, px, py, pz, rx?, ry?, rz?, label?, cuts? }.
+    // `cuts` lists tool specs in the piece's own frame ({ type, dims, px, py, pz, rx?, ry?, rz? });
+    // addAssembly() subtracts them and records them as target-local csgOps, like Cut Joint does.
     var builtInAssemblies = [
         {
             key: 'lantern',
@@ -5124,57 +5128,146 @@ window.addEventListener('load', function() {
                 { name: 'roofHeight',  labelKey: 'asm.lantern.roofHeight',default: 120, min: 20,  max: 500 },
                 { name: 'roofOverhang',labelKey: 'asm.lantern.overhang',  default: 40,  min: 0,   max: 200 }
             ],
+            // The parts hold together without glue. Assembly order: floor first, posts pushed onto
+            // its corners diagonally, panels dropped into the post grooves from above, roof last.
             build: function(p) {
                 var W = p.width, H = p.height, S = p.postSize, RH = p.roofHeight, RO = p.roofOverhang;
-                var inset = W / 2 - S / 2; // post centerline
+                // Post centerline, measured from the middle
+                var inset = W / 2 - S / 2;
+                // Tools reach this far past the surface they open, so no tool face lies on a part face
+                var E = 0.5;
+                // Floor: its corners sit in closed housings in the posts' inner quarters
+                var floorT = S * 0.5;
+                var floorY = S * 0.25;
+                // Panels: their outer stiles run in grooves along the posts' inner faces. The grooves
+                // stay shallower than the tenon shoulder (S/4), so they can run out at the top and
+                // the panels can be dropped in from above.
+                var panelD = Math.max(6, S * 0.3);
+                var groove = S * 0.2;
+                var panelY = S;
+                // Roof: a centered tenon on every post head sits in a blind hole in the roof
+                var tenon = S * 0.5;
+                var tenonH = S / 3;
+                var shoulderY = H - tenonH;
                 var specs = [];
-                // 4 corner posts (Boards rotated to vertical: long axis = height, but Boards have x=w; use y=H by setting w=S, h=H, d=S)
-                [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(function(c, i) {
+                // Post cuts in the frame of the post at the +X/+Z corner, whose inner faces look
+                // to -X and -Z. The other posts are the same part turned into their corner, so
+                // all four stay identical and share one row on the workshop sheet.
+                // Housing for the floor corner, in the quarter of the post that faces the middle
+                var postCuts = [{
+                    type: 'Board', w: S/2 + E, h: floorT, d: S/2 + E,
+                    px: -(S/4 + E/2), py: floorY + floorT/2 - H/2, pz: -(S/4 + E/2)
+                }];
+                // Grooves on both inner faces, from the bottom of the panels out through the top
+                var grooveH = H - panelY + E;
+                var grooveY = panelY + grooveH/2 - H/2;
+                var grooveOff = S/2 - groove/2 + E/2;
+                postCuts.push({ type: 'Board', w: groove + E, h: grooveH, d: panelD, px: -grooveOff, py: grooveY, pz: 0 });
+                postCuts.push({ type: 'Board', w: panelD, h: grooveH, d: groove + E, px: 0, py: grooveY, pz: -grooveOff });
+                // Tenon: cut the shoulder away on all four sides of the post head
+                var band = (S - tenon) / 2;
+                var bandOff = tenon/2 + (band + E)/2;
+                var bandY = H/2 - tenonH/2 + E/2;
+                [-1, 1].forEach(function(s) {
+                    postCuts.push({ type: 'Board', w: S + 2*E, h: tenonH + E, d: band + E, px: 0, py: bandY, pz: s * bandOff });
+                    postCuts.push({ type: 'Board', w: band + E, h: tenonH + E, d: S + 2*E, px: s * bandOff, py: bandY, pz: 0 });
+                });
+                // 4 corner posts: Boards with w = d = S standing upright (h = H), each turned so
+                // its inner faces look to the middle
+                var corners = [
+                    { sx: -1, sz: -1, ry: Math.PI },
+                    { sx:  1, sz: -1, ry: Math.PI/2 },
+                    { sx:  1, sz:  1, ry: 0 },
+                    { sx: -1, sz:  1, ry: -Math.PI/2 }
+                ];
+                corners.forEach(function(c, i) {
                     specs.push({
                         type: 'Board', w: S, h: H, d: S,
-                        px: c[0]*inset, py: H/2, pz: c[1]*inset,
-                        label: 'Post ' + (i+1)
+                        px: c.sx*inset, py: H/2, pz: c.sz*inset, ry: c.ry,
+                        label: 'Post ' + (i+1),
+                        cuts: postCuts
                     });
                 });
-                // 4 side panels (Frame primitives), one per face
-                var panelW = W - 2*S;
+                // 4 side panels (Frame primitives), one per face, reaching into the grooves
+                var panelW = W - 2*S + 2*groove;
                 var panelH = H - 2*S;
                 var fr = Math.max(8, S * 0.6);
                 var bar = Math.max(4, S * 0.35);
                 var faces = [
-                    { rot: 0,            px: 0,           pz:  W/2 - S/2 },
-                    { rot: Math.PI,      px: 0,           pz: -W/2 + S/2 },
-                    { rot:  Math.PI/2,   px: -W/2 + S/2,  pz: 0 },
-                    { rot: -Math.PI/2,   px:  W/2 - S/2,  pz: 0 }
+                    { rot: 0,            px: 0,           pz:  inset },
+                    { rot: Math.PI,      px: 0,           pz: -inset },
+                    { rot:  Math.PI/2,   px: -inset,      pz: 0 },
+                    { rot: -Math.PI/2,   px:  inset,      pz: 0 }
                 ];
                 faces.forEach(function(f, i) {
                     specs.push({
                         type: 'Frame',
-                        wOuter: panelW, hOuter: panelH, dOuter: Math.max(6, S * 0.3),
+                        wOuter: panelW, hOuter: panelH, dOuter: panelD,
                         frameThickness: fr, barThickness: bar, gridX: 3, gridY: 4,
-                        px: f.px, py: H/2, pz: f.pz, ry: f.rot,
+                        px: f.px, py: panelY + panelH/2, pz: f.pz, ry: f.rot,
                         label: 'Side ' + (i+1)
                     });
                 });
-                // Floor: a board flush with the bottom of the posts
+                // Floor: reaches to the post centerlines, so each corner fills one housing
                 specs.push({
-                    type: 'Board', w: W, h: S * 0.5, d: W,
-                    px: 0, py: S * 0.25, pz: 0,
+                    type: 'Board', w: W - S, h: floorT, d: W - S,
+                    px: 0, py: floorY + floorT/2, pz: 0,
                     label: 'Floor'
                 });
-                // Roof: a pyramid frustum sitting on top of the posts, with overhang
+                // Roof: a pyramid frustum resting on the post shoulders, with overhang and a blind
+                // hole over every tenon
+                var roofCuts = corners.map(function(c) {
+                    return {
+                        type: 'Board', w: tenon, h: tenonH + E, d: tenon,
+                        px: c.sx*inset, py: -RH/2 + (tenonH - E)/2, pz: c.sz*inset
+                    };
+                });
                 specs.push({
                     type: 'Pyramid Frustum',
                     wTop: S * 1.5, dTop: S * 1.5,
                     wBottom: W + 2*RO, dBottom: W + 2*RO,
                     h: RH,
-                    px: 0, py: H + RH/2, pz: 0,
-                    label: 'Roof'
+                    px: 0, py: shoulderY + RH/2, pz: 0,
+                    label: 'Roof',
+                    cuts: roofCuts
                 });
                 return specs;
             }
         }
     ];
+
+    // Subtract a tool given in the target's own frame and record it as a target-local csgOp,
+    // so Save → Reload replays it. The tool mesh is transient.
+    function cutLocalTool(target, cut) {
+        var tool = pieceFromSpec(cut);
+        if (!tool) return;
+        // pieceFromSpec counted the tool as a new piece
+        pieceCounter--;
+        var toolSpec = Object.assign({}, cut, {
+            local: true,
+            px: cut.px || 0, py: cut.py || 0, pz: cut.pz || 0,
+            rx: cut.rx || 0, ry: cut.ry || 0, rz: cut.rz || 0
+        });
+        tool.position.set(toolSpec.px, toolSpec.py, toolSpec.pz);
+        tool.rotation.set(toolSpec.rx, toolSpec.ry, toolSpec.rz);
+        target.add(tool);
+        tool.updateMatrixWorld(true);
+        try {
+            var newGeo = csgSubtract(target, tool);
+            target.geometry.dispose();
+            target.geometry = newGeo;
+            target.userData.notches++;
+            target.userData.csgModified = true;
+            if (!Array.isArray(target.userData.csgOps)) target.userData.csgOps = [];
+            target.userData.csgOps.push({ op: 'subtract', tool: toolSpec });
+        } catch (e) {
+            console.error('CSG cut failed:', e);
+        } finally {
+            target.remove(tool);
+            tool.geometry.dispose();
+            tool.material.dispose();
+        }
+    }
 
     // Spawn an assembly: builds all pieces, places them, and reparents into a single Group.
     // Params object is validated against the assembly's param schema (numbers clamped to [min,max]).
@@ -5199,6 +5292,10 @@ window.addEventListener('load', function() {
             mesh.position.set(spec.px || 0, spec.py || 0, spec.pz || 0);
             mesh.rotation.set(spec.rx || 0, spec.ry || 0, spec.rz || 0);
             if (spec.label) mesh.userData.label = spec.label;
+            if (spec.cuts && spec.cuts.length) {
+                spec.cuts.forEach(function(cut) { cutLocalTool(mesh, cut); });
+                applyPieceColors(mesh);
+            }
             scene.add(mesh);
             pieces.push(mesh);
             if (labelsVisible) createLabel(mesh);
@@ -6013,10 +6110,16 @@ window.addEventListener('load', function() {
         }
         if (pairs.length > 0) {
             overlapList.style.display = 'block';
-            overlapList.innerHTML = '<strong>' + t('overlap.title') + '</strong><br>' +
-                pairs.map(function(p) {
-                    return p[0].userData.label + ' &harr; ' + p[1].userData.label;
-                }).join('<br>');
+            // Labels can come from loaded files — build nodes with textContent, never innerHTML
+            overlapList.textContent = '';
+            var title = document.createElement('strong');
+            title.textContent = t('overlap.title');
+            overlapList.appendChild(title);
+            pairs.forEach(function(p) {
+                overlapList.appendChild(document.createElement('br'));
+                overlapList.appendChild(document.createTextNode(
+                    p[0].userData.label + ' ↔ ' + p[1].userData.label));
+            });
         } else {
             overlapList.style.display = 'block';
             overlapList.style.color = '#88ff88';
@@ -10561,7 +10664,14 @@ window.addEventListener('load', function() {
     function makeAddMenuItem(label, dims, onClick, deleteHandler) {
         var item = document.createElement('div');
         item.className = 'add-menu-item';
-        item.innerHTML = '<span>' + label + '</span><span class="tpl-dims">' + (dims || '') + '</span>';
+        // Template names and dims can come from imported files — textContent, never innerHTML
+        var labelSpan = document.createElement('span');
+        labelSpan.textContent = label;
+        var dimsSpan = document.createElement('span');
+        dimsSpan.className = 'tpl-dims';
+        dimsSpan.textContent = dims || '';
+        item.appendChild(labelSpan);
+        item.appendChild(dimsSpan);
         item.addEventListener('click', function(e) {
             e.stopPropagation();
             onClick();
@@ -11011,6 +11121,13 @@ window.addEventListener('load', function() {
             makeDefaultForType: makeDefaultForType,
             ADD_TYPES: ADD_TYPES,
             performCut: performCut,
+            // Assembly templates: the built-in list and the spawn function the add menu calls
+            builtInAssemblies: builtInAssemblies,
+            addAssembly: addAssembly,
+            // restoreScene() replaces the pieces array, so `pieces` above goes stale after a reload
+            getPieces: function() { return pieces; },
+            // Geometry of meshA minus meshB, in meshA's frame: tests measure overlaps with it
+            csgSubtract: csgSubtract,
             serializeScene: serializeScene,
             restoreScene: restoreScene,
             setLanguage: setLanguage,
