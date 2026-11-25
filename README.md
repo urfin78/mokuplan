@@ -163,6 +163,8 @@ Releases are cut by the manual **Auto Release** workflow (`workflow_dispatch`). 
 
 The CI tooling lives under [`.github/package.json`](.github/package.json) — kept inside `.github/` so it stays out of the application code. The app itself has no build dependencies.
 
+All workflows run with a read-only `GITHUB_TOKEN` by default; only the jobs that push or open PRs ask for write access. Dependabot ([`.github/dependabot.yml`](.github/dependabot.yml)) opens weekly grouped PRs for the GitHub Actions and the CI tooling. Three.js is loaded through the CDN import map, which Dependabot does not see, so it is bumped by hand.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

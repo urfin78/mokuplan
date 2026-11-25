@@ -6103,10 +6103,16 @@ window.addEventListener('load', function() {
         }
         if (pairs.length > 0) {
             overlapList.style.display = 'block';
-            overlapList.innerHTML = '<strong>' + t('overlap.title') + '</strong><br>' +
-                pairs.map(function(p) {
-                    return p[0].userData.label + ' &harr; ' + p[1].userData.label;
-                }).join('<br>');
+            // Labels can come from loaded files — build nodes with textContent, never innerHTML
+            overlapList.textContent = '';
+            var title = document.createElement('strong');
+            title.textContent = t('overlap.title');
+            overlapList.appendChild(title);
+            pairs.forEach(function(p) {
+                overlapList.appendChild(document.createElement('br'));
+                overlapList.appendChild(document.createTextNode(
+                    p[0].userData.label + ' ↔ ' + p[1].userData.label));
+            });
         } else {
             overlapList.style.display = 'block';
             overlapList.style.color = '#88ff88';
@@ -10268,7 +10274,14 @@ window.addEventListener('load', function() {
     function makeAddMenuItem(label, dims, onClick, deleteHandler) {
         var item = document.createElement('div');
         item.className = 'add-menu-item';
-        item.innerHTML = '<span>' + label + '</span><span class="tpl-dims">' + (dims || '') + '</span>';
+        // Template names and dims can come from imported files — textContent, never innerHTML
+        var labelSpan = document.createElement('span');
+        labelSpan.textContent = label;
+        var dimsSpan = document.createElement('span');
+        dimsSpan.className = 'tpl-dims';
+        dimsSpan.textContent = dims || '';
+        item.appendChild(labelSpan);
+        item.appendChild(dimsSpan);
         item.addEventListener('click', function(e) {
             e.stopPropagation();
             onClick();

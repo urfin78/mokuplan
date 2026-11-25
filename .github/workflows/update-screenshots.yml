@@ -13,6 +13,10 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
+# Least privilege by default; jobs that write declare it themselves
+permissions:
+  contents: read
+
 jobs:
   regen:
     runs-on: ubuntu-latest
